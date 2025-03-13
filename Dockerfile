@@ -45,6 +45,7 @@ RUN chmod +x elan-install.sh
 RUN ./elan-install.sh -y
 RUN . /home/user/.elan/env
 RUN /home/user/.elan/bin/elan self update
+RUN /home/user/.elan/bin/elan toolchain install v4.14.0-rc1
 
 COPY --chown=user lean-egg lean-egg
 WORKDIR /home/user/lean-egg
