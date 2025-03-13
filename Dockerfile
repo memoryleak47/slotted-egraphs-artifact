@@ -23,7 +23,7 @@
 # THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-FROM ubuntu:24.04
+FROM rust:1.67
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt -y update
 RUN apt -y upgrade
@@ -46,8 +46,9 @@ RUN ./elan-install.sh -y
 RUN . /home/user/.elan/env
 RUN /home/user/.elan/bin/elan self update
 
-COPY --chown=user . lean-egg
+COPY --chown=user lean-egg lean-egg
 WORKDIR /home/user/lean-egg
+
 
 #Build Lean-Egg
 RUN /home/user/.elan/bin/lake update
