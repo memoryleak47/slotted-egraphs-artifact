@@ -1,0 +1,3 @@
+[submodule "lean-egg"]
+	path = lean-egg
+	url = git@github.com:marcusrossel/lean-egg.git
