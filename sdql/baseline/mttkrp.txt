@@ -1,6 +1,6 @@
-coarse:
-mttkrp_2nd & 419 & 1,256,975 & 76,589 & \yes & 901.28
-Final Cost: 505094326017
 fine:
 mttkrp_2nd & 424 & 2,970,959 & 378,263 & \no & 1623.95
 Final Cost: 553454326017
+coarse:
+mttkrp_2nd & 419 & 1,256,975 & 76,589 & \yes & 901.28
+Final Cost: 505094326017

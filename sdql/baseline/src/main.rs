@@ -42,7 +42,7 @@ fn main() {
         .with_iter_limit(4000)
         .with_node_limit(10_000_000)
         .with_time_limit(Duration::from_secs(1200));
-    
+
     runner = runner.with_hook(move |r| {
             let mut out_of_memory = false;
             if let Some(it) = r.iterations.last() {
@@ -87,7 +87,7 @@ fn main() {
     let mut extractor = Extractor::new(&runner.egraph, cost_func);
     let (best_cost, best) = extractor.find_best(runner.roots[0]);
     let memory = memory_stats().expect("could not get current memory usage");
-    println!("{} & {} & {} & {} & {} & {:.2}", filename, runner.iterations.len(), 
+    println!("{} & slotted & {} & {} & {} & {} & {:.2}", filename, runner.iterations.len(), 
         thousand_seperator(runner.egraph.total_number_of_nodes()), 
         thousand_seperator(runner.egraph.number_of_classes()),
         if matches!(runner.stop_reason.as_ref().unwrap(), egg::StopReason::Saturated) {"\\yes"} else {"\\no"},
