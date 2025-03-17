@@ -9,7 +9,7 @@ edition = "2018"
 [dependencies]
 symbolic_expressions = "5"
 # egg = "0.6.0"
-egg = { path = "../egg" }
+egg = { path = "./egg" }
 fxhash = "0.1.0"
 log = "0.4"
 instant = "0.1"
