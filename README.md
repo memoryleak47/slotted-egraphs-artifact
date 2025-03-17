@@ -15,7 +15,9 @@ and run them accordingly.
 
 You should find the results in the `outputs` folder.
 
+After running sufficiently many tests, you can abort `run.sh`; and run `python3 plot.py outputs`.
 
+This should generate the output graphs from Figure 8 of our paper.
 
 ## Lean Tactic Case Study
 
