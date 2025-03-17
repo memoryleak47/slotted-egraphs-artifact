@@ -32,7 +32,9 @@ RUN apt -y upgrade
 RUN apt-get update && apt-get install -y \
     git \
     curl \
-    sudo
+    sudo \
+    time \
+    coreutils
 
 # Create a regular user
 RUN useradd --user-group --system --create-home --no-log-init user
