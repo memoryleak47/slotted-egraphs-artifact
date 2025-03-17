@@ -39,7 +39,7 @@ fn main() {
     let filename = &args[0];
     // let csv_out = &args[1];
     // let csv_f = std::fs::File::create(csv_out).unwrap();
-    let folder = "../tests/sdql/progs";
+    let folder = "./progs";
     let prog_str = fs::read_to_string(format!("{folder}/{filename}.sexp")).expect("Unable to read file");
     let prog: RecExpr<Sdql> = RecExpr::parse(&prog_str).unwrap();
     let mut eg = EGraph::<Sdql, SdqlKind>::new();

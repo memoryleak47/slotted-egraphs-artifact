@@ -1,0 +1,21 @@
+[package]
+name = "slotted-egraphs"
+version = "0.0.26"
+edition = "2021"
+description = "E-Graphs with name binding"
+license = "Apache-2.0 OR MIT"
+repository = "https://github.com/memoryleak47/slotted-egraphs/"
+
+[package.metadata.docs.rs]
+features = ["explanations"]
+
+[dependencies]
+fnv = "1.0.7"
+tracing = { version = "0.1", features = ["attributes"], optional = true }
+
+[dev-dependencies]
+symbol_table = { version = "0.3", features = ["global"]}
+rand = "0.8.5"
+
+[profile.release]
+debug = false

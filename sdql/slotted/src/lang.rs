@@ -1,249 +1,267 @@
 use crate::*;
 
-#[derive(Debug, Clone)]
-/// A child node of some term ("child" in the sense of an AST).
-///
-/// This type is used for parsing and displaying of your e-node.
-/// You only need to implement [Language::to_op] and [Language::from_op] to express, whether your E-Node expects [Slot]s or [AppliedId]s at particular positions.
-pub enum Child {
-    AppliedId(AppliedId),
-    Slot(Slot),
+#[derive(Clone, Hash, PartialEq, Eq, PartialOrd, Ord, Debug)]
+pub enum Sdql {
+    Lam(Slot, AppliedId),
+    Var(Slot),
+    Sing(AppliedId, AppliedId),
+    Add(AppliedId, AppliedId),
+    Mult(AppliedId, AppliedId),
+    Sub(AppliedId, AppliedId),
+    Equality(AppliedId, AppliedId),
+    Get(AppliedId, AppliedId),
+    Range(AppliedId, AppliedId),
+    App(AppliedId, AppliedId),
+    IfThen(AppliedId, AppliedId),
+    Binop(AppliedId, AppliedId, AppliedId),
+    SubArray(AppliedId, AppliedId, AppliedId),
+    Unique(AppliedId),
+    Sum(Slot, Slot, /*range: */AppliedId, /*body: */ AppliedId),
+    Merge(Slot, Slot, Slot, /*range1: */AppliedId, /*range2: */AppliedId, /*body: */ AppliedId),
+    Let(Slot, AppliedId, AppliedId),
+    Num(u32),
+    Symbol(Symbol),
 }
 
-/// A trait to define your Language (i.e. your E-Node type).
-pub trait Language: Debug + Clone + Hash + Eq {
-    /// List the mutable references of all child [Slot]s in your E-Node, in order of occurence.
-    fn all_slot_occurences_mut(&mut self) -> Vec<&mut Slot>;
-
-    /// List the mutable references to all *public* child [Slot]s in your E-Node, in order of occurence.
-    ///
-    /// Public Slots are those, which are visible from the outside of that e-node.
-    /// * A typical example would be a `(var $x)` e-node, which has a *public* slot `$x`.
-    /// * A typical counter-example would be the `(lam $x body)` e-node, which has a *private* slot `$x`.
-    fn public_slot_occurences_mut(&mut self) -> Vec<&mut Slot>;
-
-    /// List the mutable references to all child [AppliedId]s in your E-Node, in the order of occurence.
-    fn applied_id_occurences_mut(&mut self) -> Vec<&mut AppliedId>;
-
-    // for parsing and pretty-printing.
-    /// Decomposes an E-Node into it's "operator" string and a list of children.
-    ///
-    /// This function will be used to display your E-Node.
-    fn to_op(&self) -> (String, Vec<Child>);
-
-    /// Computes your E-Node from an "operator" string and a list of children.
-    ///
-    /// This function will be used to parse your E-Node.
-    fn from_op(op: &str, children: Vec<Child>) -> Option<Self>;
-
-    #[track_caller]
-    #[doc(hidden)]
-    fn check(&self) {
-        let mut c = self.clone();
-        let all: HashSet<*mut Slot> = c.all_slot_occurences_mut().into_iter().map(|x| x as *mut Slot).collect();
-        let public: HashSet<*mut Slot> = c.public_slot_occurences_mut().into_iter().map(|x| x as *mut Slot).collect();
-        let private: HashSet<*mut Slot> = c.private_slot_occurences_mut().into_iter().map(|x| x as *mut Slot).collect();
-
-        assert!(public.is_disjoint(&private));
-
-        // This also catches errors, where different Slot-addresses have the same slot names. This also counts as a collision!
-        let f = |x: Vec<Slot>| x.into_iter().collect::<HashSet<_>>();
-        assert!(f(c.public_slot_occurences()).is_disjoint(&f(c.private_slot_occurences())));
-
-        let all2: HashSet<*mut Slot> = public.union(&private).copied().collect();
-        assert_eq!(all2, all);
-    }
-
-
-    // generated methods:
-
-    #[doc(hidden)]
-    fn private_slot_occurences_mut(&mut self) -> Vec<&mut Slot> {
-        let public = self.public_slot_occurences();
-        let mut out = self.all_slot_occurences_mut();
-        out.retain(|x| !public.contains(x));
+impl Language for Sdql {
+    fn all_slot_occurences_mut(&mut self) -> Vec<&mut Slot> {
+        let mut out = Vec::new();
+        match self {
+            Sdql::Lam(x, b) => {
+                out.push(x);
+                out.extend(b.slots_mut());
+            }
+            Sdql::Var(x) => {
+                out.push(x);
+            }
+            Sdql::Sing(x, y) => {
+                out.extend(x.slots_mut());
+                out.extend(y.slots_mut());
+            }
+            Sdql::Add(x, y) => {
+                out.extend(x.slots_mut());
+                out.extend(y.slots_mut());
+            }
+            Sdql::Mult(x, y) => {
+                out.extend(x.slots_mut());
+                out.extend(y.slots_mut());
+            }
+            Sdql::Sub(x, y) => {
+                out.extend(x.slots_mut());
+                out.extend(y.slots_mut());
+            }
+            Sdql::Equality(x, y) => {
+                out.extend(x.slots_mut());
+                out.extend(y.slots_mut());
+            }
+            Sdql::Get(x, y) => {
+                out.extend(x.slots_mut());
+                out.extend(y.slots_mut());
+            }
+            Sdql::Range(x, y) => {
+                out.extend(x.slots_mut());
+                out.extend(y.slots_mut());
+            }
+            Sdql::App(x, y) => {
+                out.extend(x.slots_mut());
+                out.extend(y.slots_mut());
+            }
+            Sdql::IfThen(x, y) => {
+                out.extend(x.slots_mut());
+                out.extend(y.slots_mut());
+            }
+            Sdql::Binop(x, y, z) => {
+                out.extend(x.slots_mut());
+                out.extend(y.slots_mut());
+                out.extend(z.slots_mut());
+            }
+            Sdql::SubArray(x, y, z) => {
+                out.extend(x.slots_mut());
+                out.extend(y.slots_mut());
+                out.extend(z.slots_mut());
+            }
+            Sdql::Unique(x) => {
+                out.extend(x.slots_mut());
+            }
+            Sdql::Sum(k, v, r, b) => {
+                out.push(k);
+                out.push(v);
+                out.extend(r.slots_mut());
+                out.extend(b.slots_mut());
+            }
+            Sdql::Merge(k1, k2, v, r1, r2, b) => {
+                out.push(k1);
+                out.push(k2);
+                out.push(v);
+                out.extend(r1.slots_mut());
+                out.extend(r2.slots_mut());
+                out.extend(b.slots_mut());
+            }
+            Sdql::Let(x, e1, e2) => {
+                out.push(x);
+                out.extend(e1.slots_mut());
+                out.extend(e2.slots_mut());
+            }
+            Sdql::Num(_) => {}
+            Sdql::Symbol(_) => {}
+        }
         out
     }
 
-    #[doc(hidden)]
-    fn all_slot_occurences(&self) -> Vec<Slot> {
-        self.clone().all_slot_occurences_mut().into_iter().map(|x| x.clone()).collect()
-    }
+    fn public_slot_occurences_mut(&mut self) -> Vec<&mut Slot> {
+        let mut out = Vec::new();
+        match self {
+            Sdql::Lam(x, b) => {
+                out.extend(b.slots_mut().into_iter().filter(|y| *y != x));
 
-    #[doc(hidden)]
-    fn public_slot_occurences(&self) -> Vec<Slot> {
-        self.clone().public_slot_occurences_mut().into_iter().map(|x| x.clone()).collect()
-    }
-
-    #[doc(hidden)]
-    fn applied_id_occurences(&self) -> Vec<AppliedId> {
-        self.clone().applied_id_occurences_mut().into_iter().map(|x| x.clone()).collect()
-    }
-
-    #[doc(hidden)]
-    fn private_slot_occurences(&self) -> Vec<Slot> {
-        self.clone().private_slot_occurences_mut().into_iter().map(|x| x.clone()).collect()
-    }
-
-    #[doc(hidden)]
-    fn private_slots(&self) -> HashSet<Slot> {
-        self.private_slot_occurences().into_iter().collect()
-    }
-
-    #[doc(hidden)]
-    fn map_applied_ids(&self, mut f: impl FnMut(AppliedId) -> AppliedId) -> Self {
-        let mut c = self.clone();
-        for x in c.applied_id_occurences_mut() {
-            *x = f(x.clone());
-        }
-        c
-    }
-
-    // TODO m.values() might collide with your private slot names.
-    // Should we rename our private slots to be safe?
-    #[doc(hidden)]
-    fn apply_slotmap_partial(&self, m: &SlotMap) -> Self {
-        let prv = self.private_slots();
-
-        let mut c = self.clone();
-        for x in c.public_slot_occurences_mut() {
-            let y = m[*x];
-
-            // If y collides with a private slot, we have a problem.
-            if CHECKS {
-                assert!(!prv.contains(&y));
             }
-
-            *x = y;
-        }
-        c
-    }
-
-
-    #[track_caller]
-    #[doc(hidden)]
-    fn apply_slotmap(&self, m: &SlotMap) -> Self {
-        if CHECKS {
-            assert!(m.keys().is_superset(&self.slots()), "Language::apply_slotmap: The SlotMap doesn't map all free slots!");
-        }
-        self.apply_slotmap_partial(m)
-    }
-
-    #[doc(hidden)]
-    fn apply_slotmap_fresh(&self, m: &SlotMap) -> Self {
-        let prv = self.private_slots();
-
-        let mut c = self.clone();
-        for x in c.public_slot_occurences_mut() {
-            let y = m.get(*x).unwrap_or_else(Slot::fresh);
-
-            // If y collides with a private slot, we have a problem.
-            if CHECKS {
-                assert!(!prv.contains(&y));
+            Sdql::Var(x) => {
+                out.push(x);
             }
-
-            *x = y;
-        }
-        c
-    }
-
-
-    #[doc(hidden)]
-    fn slot_occurences(&self) -> Vec<Slot> {
-        self.public_slot_occurences()
-    }
-
-    #[doc(hidden)]
-    fn slot_order(&self) -> Vec<Slot> { firsts(self.slot_occurences()) }
-
-    #[doc(hidden)]
-    fn slots(&self) -> HashSet<Slot> { as_set(self.slot_occurences()) }
-
-    #[doc(hidden)]
-    fn ids(&self) -> Vec<Id> {
-        self.applied_id_occurences().into_iter().map(|x| x.id).collect()
-    }
-
-    // let n.weak_shape() = (sh, bij); then
-    // - sh.apply_slotmap(bij) is equivalent to n (excluding lambda variable renames)
-    // - bij.slots() == n.slots(). Note that these would also include redundant slots.
-    // - sh is the lexicographically lowest equivalent version of n, reachable by bijective renaming of slots (including redundant ones).
-    #[doc(hidden)]
-    fn weak_shape(&self) -> (Self, Bijection) {
-        let mut c = self.clone();
-        let mut m = SlotMap::new();
-        let mut i = 0;
-
-        for x in c.all_slot_occurences_mut() {
-            let x_val = *x;
-            if !m.contains_key(x_val) {
-                let new_slot = Slot::numeric(i);
-                i += 1;
-
-                m.insert(x_val, new_slot);
+            Sdql::Sing(x, y) => {
+                out.extend(x.slots_mut());
+                out.extend(y.slots_mut());
             }
-
-            *x = m[x_val];
-        }
-
-        let m = m.inverse();
-
-        let public = c.slots();
-        let m: SlotMap = m.iter().filter(|(x, _)| public.contains(x)).collect();
-
-        (c, m)
-    }
-
-    #[doc(hidden)]
-    fn refresh_private(&self) -> Self {
-        let mut c = self.clone();
-        let prv: HashSet<Slot> = c.private_slot_occurences().into_iter().collect();
-        let fresh = SlotMap::bijection_from_fresh_to(&prv).inverse();
-        for x in c.private_slot_occurences_mut() {
-            *x = fresh[*x];
-        }
-        c
-    }
-
-    #[doc(hidden)]
-    fn refresh_slots(&self, set: HashSet<Slot>) -> Self {
-        let mut c = self.clone();
-        let fresh = SlotMap::bijection_from_fresh_to(&set).inverse();
-        for x in c.all_slot_occurences_mut() {
-            if set.contains(x) {
-                *x = fresh[*x];
+            Sdql::Add(x, y) => {
+                out.extend(x.slots_mut());
+                out.extend(y.slots_mut());
             }
-        }
-        c
-    }
-
-    // refreshes private and redundant slots.
-    // The public slots are given by `public`.
-    #[doc(hidden)]
-    fn refresh_internals(&self, public: HashSet<Slot>) -> Self {
-        let mut c = self.clone();
-        let internals = &c.all_slot_occurences().into_iter().collect::<HashSet<_>>() - &public;
-        let fresh = SlotMap::bijection_from_fresh_to(&internals).inverse();
-        for x in c.all_slot_occurences_mut() {
-            if internals.contains(x) {
-                *x = fresh[*x];
+            Sdql::Mult(x, y) => {
+                out.extend(x.slots_mut());
+                out.extend(y.slots_mut());
             }
+            Sdql::Sub(x, y) => {
+                out.extend(x.slots_mut());
+                out.extend(y.slots_mut());
+            }
+            Sdql::Equality(x, y) => {
+                out.extend(x.slots_mut());
+                out.extend(y.slots_mut());
+            }
+            Sdql::Get(x, y) => {
+                out.extend(x.slots_mut());
+                out.extend(y.slots_mut());
+            }
+            Sdql::Range(x, y) => {
+                out.extend(x.slots_mut());
+                out.extend(y.slots_mut());
+            }
+            Sdql::App(x, y) => {
+                out.extend(x.slots_mut());
+                out.extend(y.slots_mut());
+            }
+            Sdql::IfThen(x, y) => {
+                out.extend(x.slots_mut());
+                out.extend(y.slots_mut());
+            }
+            Sdql::Binop(x, y, z) => {
+                out.extend(x.slots_mut());
+                out.extend(y.slots_mut());
+                out.extend(z.slots_mut());
+            }
+            Sdql::SubArray(x, y, z) => {
+                out.extend(x.slots_mut());
+                out.extend(y.slots_mut());
+                out.extend(z.slots_mut());
+            }
+            Sdql::Unique(x) => {
+                out.extend(x.slots_mut());
+            }
+            Sdql::Sum(k, v, r, b) => {
+                out.extend(b.slots_mut().into_iter().filter(|y| *y != k && *y != v));
+                out.extend(r.slots_mut());
+            }
+            Sdql::Merge(k1, k2, v, r1, r2, b) => {
+                out.extend(b.slots_mut().into_iter().filter(|y| *y != k1 && *y != k2 && *y != v));
+                out.extend(r1.slots_mut());
+                out.extend(r2.slots_mut());
+            }
+            Sdql::Let(x, e1, e2) => {
+                out.extend(e2.slots_mut().into_iter().filter(|y| *y != x));
+                out.extend(e1.slots_mut());
+            }
+            Sdql::Num(_) => {}
+            Sdql::Symbol(_) => {}
         }
-        c
+        out
     }
-}
 
-// sorts as_set(v) by their first usage in v.
-pub(crate) fn firsts(v: Vec<Slot>) -> Vec<Slot> {
-    let mut out = Vec::new();
-    for x in v {
-        if !out.contains(&x) {
-            out.push(x);
+    fn applied_id_occurences_mut(&mut self) -> Vec<&mut AppliedId> {
+        match self {
+            Sdql::Lam(_, y) => vec![y],
+            Sdql::Var(_) => vec![],
+            Sdql::Sing(x, y) => vec![x, y],
+            Sdql::Add(x, y) => vec![x, y],
+            Sdql::Mult(x, y) => vec![x, y],
+            Sdql::Sub(x, y) => vec![x, y],
+            Sdql::Equality(x, y) => vec![x, y],
+            Sdql::Get(x, y) => vec![x, y],
+            Sdql::Range(x, y) => vec![x, y],
+            Sdql::App(x, y) => vec![x, y],
+            Sdql::IfThen(x, y) => vec![x, y],
+            Sdql::Binop(x, y, z) => vec![x, y, z],
+            Sdql::SubArray(x, y, z) => vec![x, y, z],
+            Sdql::Unique(x) => vec![x],
+            Sdql::Sum(_, _, r, b) => vec![r, b],
+            Sdql::Merge(_, _, _, r1, r2, b) => vec![r1, r2, b],
+            Sdql::Let(_, e1, e2) => vec![e1, e2],
+            Sdql::Num(_) => vec![],
+            Sdql::Symbol(_) => vec![],
         }
     }
-    out
-}
 
-pub(crate) fn as_set(v: Vec<Slot>) -> HashSet<Slot> {
-    v.into_iter().collect()
+    fn to_op(&self) -> (String, Vec<Child>) {
+        match self.clone() {
+            Sdql::Lam(s, a) => (String::from("lambda"), vec![Child::Slot(s), Child::AppliedId(a)]),
+            Sdql::Var(s) => (String::from("var"), vec![Child::Slot(s)]),
+            Sdql::Sing(x, y) => (String::from("sing"), vec![Child::AppliedId(x), Child::AppliedId(y)]),
+            Sdql::Add(x, y) => (String::from("+"), vec![Child::AppliedId(x), Child::AppliedId(y)]),
+            Sdql::Mult(x, y) => (String::from("*"), vec![Child::AppliedId(x), Child::AppliedId(y)]),
+            Sdql::Sub(x, y) => (String::from("-"), vec![Child::AppliedId(x), Child::AppliedId(y)]),
+            Sdql::Equality(x, y) => (String::from("eq"), vec![Child::AppliedId(x), Child::AppliedId(y)]),
+            Sdql::Get(x, y) => (String::from("get"), vec![Child::AppliedId(x), Child::AppliedId(y)]),
+            Sdql::Range(x, y) => (String::from("range"), vec![Child::AppliedId(x), Child::AppliedId(y)]),
+            Sdql::App(x, y) => (String::from("apply"), vec![Child::AppliedId(x), Child::AppliedId(y)]),
+            Sdql::IfThen(x, y) => (String::from("ifthen"), vec![Child::AppliedId(x), Child::AppliedId(y)]),
+            Sdql::Binop(x, y, z) => (String::from("binop"), vec![Child::AppliedId(x), Child::AppliedId(y), Child::AppliedId(z)]),
+            Sdql::SubArray(x, y, z) => (String::from("subarray"), vec![Child::AppliedId(x), Child::AppliedId(y), Child::AppliedId(z)]),
+            Sdql::Unique(x) => (String::from("unique"), vec![Child::AppliedId(x)]),
+            Sdql::Sum(k, v, r, b) => (String::from("sum"), vec![Child::Slot(k), Child::Slot(v), Child::AppliedId(r), Child::AppliedId(b)]),
+            Sdql::Merge(k1, k2, v, r1, r2, b) => (String::from("merge"), vec![Child::Slot(k1), Child::Slot(k2), Child::Slot(v), Child::AppliedId(r1), Child::AppliedId(r2), Child::AppliedId(b)]),
+            Sdql::Let(x, e1, e2) => (String::from("let"), vec![Child::Slot(x), Child::AppliedId(e1), Child::AppliedId(e2)]),
+            Sdql::Num(n) => (format!("{}", n), vec![]),
+            Sdql::Symbol(s) => (format!("{}", s), vec![]),
+        }
+    }
+
+    fn from_op(op: &str, children: Vec<Child>) -> Option<Self> {
+        match (op, &*children) {
+            ("lambda", [Child::Slot(s), Child::AppliedId(a)]) => Some(Sdql::Lam(*s, a.clone())),
+            ("var", [Child::Slot(s)]) => Some(Sdql::Var(*s)),
+            ("sing", [Child::AppliedId(x), Child::AppliedId(y)]) => Some(Sdql::Sing(x.clone(), y.clone())),
+            ("+", [Child::AppliedId(x), Child::AppliedId(y)]) => Some(Sdql::Add(x.clone(), y.clone())),
+            ("*", [Child::AppliedId(x), Child::AppliedId(y)]) => Some(Sdql::Mult(x.clone(), y.clone())),
+            ("-", [Child::AppliedId(x), Child::AppliedId(y)]) => Some(Sdql::Sub(x.clone(), y.clone())),
+            ("eq", [Child::AppliedId(x), Child::AppliedId(y)]) => Some(Sdql::Equality(x.clone(), y.clone())),
+            ("get", [Child::AppliedId(x), Child::AppliedId(y)]) => Some(Sdql::Get(x.clone(), y.clone())),
+            ("range", [Child::AppliedId(x), Child::AppliedId(y)]) => Some(Sdql::Range(x.clone(), y.clone())),
+            ("apply", [Child::AppliedId(x), Child::AppliedId(y)]) => Some(Sdql::App(x.clone(), y.clone())),
+            ("ifthen", [Child::AppliedId(x), Child::AppliedId(y)]) => Some(Sdql::IfThen(x.clone(), y.clone())),
+            ("binop", [Child::AppliedId(x), Child::AppliedId(y), Child::AppliedId(z)]) => Some(Sdql::Binop(x.clone(), y.clone(), z.clone())),
+            ("subarray", [Child::AppliedId(x), Child::AppliedId(y), Child::AppliedId(z)]) => Some(Sdql::SubArray(x.clone(), y.clone(), z.clone())),
+            ("unique", [Child::AppliedId(x)]) => Some(Sdql::Unique(x.clone())),
+            ("sum", [Child::Slot(k), Child::Slot(v), Child::AppliedId(r), Child::AppliedId(b)]) => Some(Sdql::Sum(*k, *v, r.clone(), b.clone())),
+            ("merge", [Child::Slot(k1), Child::Slot(k2), Child::Slot(v), Child::AppliedId(r1), Child::AppliedId(r2), Child::AppliedId(b)]) => Some(Sdql::Merge(*k1, *k2, *v, r1.clone(), r2.clone(), b.clone())),
+            ("let", [Child::Slot(x), Child::AppliedId(e1), Child::AppliedId(e2)]) => Some(Sdql::Let(*x, e1.clone(), e2.clone())),
+            (op, []) => {
+                if let Ok(u) = op.parse::<u32>() {
+                    Some(Sdql::Num(u))
+                } else {
+                    let s: Symbol = op.parse().ok()?;
+                    Some(Sdql::Symbol(s))
+                }
+            },
+            _ => None,
+        }
+    }
 }
