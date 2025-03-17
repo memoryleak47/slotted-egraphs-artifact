@@ -52,6 +52,6 @@ RUN . /home/user/.elan/env
 RUN /home/user/.elan/bin/elan self update
 RUN /home/user/.elan/bin/elan toolchain install v4.14.0-rc1
 
-COPY --chown=user . artifact
+COPY --chown=user . .
 
 CMD ["/usr/bin/bash"]
