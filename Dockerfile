@@ -49,8 +49,8 @@ RUN . /home/user/.elan/env
 RUN /home/user/.elan/bin/elan self update
 RUN /home/user/.elan/bin/elan toolchain install v4.14.0-rc1
 
-COPY --chown=user lean-egg lean-egg
-WORKDIR /home/user/lean-egg
+COPY --chown=user . artifact
+WORKDIR /home/user/artifact/lean-egg
 
 
 #Build Lean-Egg
