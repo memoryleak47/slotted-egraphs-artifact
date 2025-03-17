@@ -27,25 +27,23 @@ fn thousand_seperator(num: usize) -> String {
     .join(",");
 }
 
+// usage:
+// run batax_v0 e2e coarse
+// run batax_v0 ind fine
 fn main() {
     let args: Vec<String> = env::args().collect();
+    let filename = &args[1];
+    let e2e = &args[2];
+    let coarse = &args[3];
     // println!("{:?}", args[1]);
-    //// E2E
-    // let MEMORY_LIMIT = 1_500 * 1024 * 1024;
-    //// MTTKRP individual
-    let MEMORY_LIMIT = 3_000 * 1024 * 1024;
+    let MEMORY_LIMIT = 1_500 * 1024 * 1024;
 
     let mut runner = Runner::default()
-        // .with_explanations_enabled()
-        //// MTTKRP individual
-        // .with_iter_limit(4000)
-        // .with_node_limit(10_000_000)
-        // .with_time_limit(Duration::from_secs(1200))
-        //// E2E
-        .with_iter_limit(4_000)
-        .with_node_limit(1_000_000)
-        .with_time_limit(Duration::from_secs(120))
-        .with_hook(move |r| {
+        .with_iter_limit(4000)
+        .with_node_limit(10_000_000)
+        .with_time_limit(Duration::from_secs(1200));
+    
+    runner = runner.with_hook(move |r| {
             let mut out_of_memory = false;
             if let Some(it) = r.iterations.last() {
                 let memory = memory_stats().expect("could not get current memory usage");
@@ -59,7 +57,9 @@ fn main() {
             }
         })
         ;
-    let filename = if args.len() >= 2 { &args[1] } else { "batax_v0" };
+        
+        
+    
     let input_file = "progs/".to_owned() + filename + ".sexp";
     let output_file = "progs/".to_owned() + filename + "_esat.sexp";
     let start = fs::read_to_string(input_file).expect("Unable to read file");
@@ -75,16 +75,19 @@ fn main() {
     let start_expr = converted.parse().unwrap();
 
     runner = runner.with_expr(&start_expr);
-    runner = runner.run(&rules_old());
-    // runner = runner.run(&rules());
+    runner = if coarse == "coarse" {
+        runner.run(&rules_old())
+    } else {
+        runner.run(&rules())
+    };
 
-    println!("{}", filename);
-    runner.print_report();
+    // println!("{}", filename);
+    // runner.print_report();
     let cost_func = SDQLCost { egraph: &runner.egraph };
     let mut extractor = Extractor::new(&runner.egraph, cost_func);
     let (best_cost, best) = extractor.find_best(runner.roots[0]);
     let memory = memory_stats().expect("could not get current memory usage");
-    println!("{} & {} & {} & {} & {:.2}", runner.iterations.len(), 
+    println!("{} & {} & {} & {} & {} & {:.2}", filename, runner.iterations.len(), 
         thousand_seperator(runner.egraph.total_number_of_nodes()), 
         thousand_seperator(runner.egraph.number_of_classes()),
         if matches!(runner.stop_reason.as_ref().unwrap(), egg::StopReason::Saturated) {"\\yes"} else {"\\no"},
@@ -93,7 +96,9 @@ fn main() {
     // println!("{}", best);
     let out_str = sdql_print(best, false);
     // println!("init cost:\t{}", SDQLCost { egraph: &runner.egraph }.cost_rec(&start_expr));
-    println!("Final Cost: {}", best_cost);
+    if e2e != "e2e" {
+        println!("Final Cost: {}", best_cost);
+    }
     fs::write(output_file, out_str).expect("Unable to write file");
     // runner.egraph.dot().to_png("target/out.png").unwrap();
     // runner.egraph.dot().to_dot("target/out.dot").unwrap();

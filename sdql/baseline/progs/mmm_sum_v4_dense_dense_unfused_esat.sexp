@@ -1,1 +1,0 @@
-(lambda var_01 (lambda var_02 (lambda var_03 (lambda var_04 (lambda var_05 (lambda var_06 (sum var_07 var_08 (range 1 (var var_05)) (* (sum var_09 var_10 (range 1 (var var_02)) (get (var var_01) (+ (* (- (var var_08) 1) (var var_02)) (var var_10)))) (sum var_09 var_10 (range 1 (var var_06)) (get (var var_04) (+ (* (- (var var_08) 1) (var var_06)) (var var_10))))))))))))
