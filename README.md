@@ -23,7 +23,7 @@ This should generate the output graphs from Figure 8 of our paper.
 
 In order to benchmark all files from the baseline (using egg), you need to go to
 the folder `sdql/baseline/sdqlite-eqsat` and run `bench.sh`.
-Similarly, in order to run the slotted version, go to `sdql/slotted/slotted-egraphs/slotted-sdql` and run `bench.sh`.
+Similarly, in order to run the slotted version, go to `sdql/slotted/slotted-sdql` and run `bench.sh`.
 
 In both cases, the results will be written to `gen_log1.txt` and `gen_log2.txt` (TODO: explain why two separate files).
 
