@@ -3,19 +3,18 @@ Slotted E-Graphs - Artifact
 
 In this repository, we will collect the benchmarks from our paper into one artifact.
 
+Each of the three benchmarks corresponds to a folder (functional-array-language, lean-egg, sdql) with a `main.sh` file in it.
+This `main.sh` is the entry point of that benchmark and will be ran only within the docker image.
 
 ## Functional Array Language
 
-To reproduce the Functional Array Language case study, run the `./run.sh` script in the functional-array-language folder.
+To reproduce the Functional Array Language case study, run `uv run run.py` in the functional-array-language folder. You will need to the `uv` Python package manager.
 
-It should compile both egg-rise and slotted-rise (which also includes the slotted-db module),
-
-and run them accordingly.
-
+It should compile both egg-rise and slotted-rise (which also includes the slotted-db module), and run them accordingly.
 
 You should find the results in the `outputs` folder.
 
-After running sufficiently many tests, you can abort `run.sh`; and run `python3 plot.py outputs`. You will need to have pandas and matplotlib installed for that.
+After running sufficiently many tests, you can abort `run.py`; and run `uv run plot.py outputs`. The `uv` package manager should have taken care of installing pandas and matplotlib.
 
 This should generate the output graphs from Figure 8 of our paper.
 

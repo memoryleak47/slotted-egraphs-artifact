@@ -1,0 +1,15 @@
+{"version": "1.1.0",
+ "packagesDir": ".lake/packages",
+ "packages":
+ [{"url": "https://github.com/nomeata/lean-calcify",
+   "type": "git",
+   "subDir": null,
+   "scope": "nomeata",
+   "rev": "dbc14d28fad2b090158ad60e490da9067b4519be",
+   "name": "calcify",
+   "manifestFile": "lake-manifest.json",
+   "inputRev": "master",
+   "inherited": false,
+   "configFile": "lakefile.toml"}],
+ "name": "egg",
+ "lakeDir": ".lake"}

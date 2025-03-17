@@ -32,27 +32,27 @@ RUN apt -y upgrade
 RUN apt-get update && apt-get install -y \
     git \
     curl \
-    sudo
+    sudo \
+    time \
+    coreutils
 
 # Create a regular user
 RUN useradd --user-group --system --create-home --no-log-init user
 USER user
 WORKDIR /home/user
 
+# Install the uv package manager
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+
 # Install Elan
 RUN curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf > elan-install.sh
 RUN chmod +x elan-install.sh
 RUN ./elan-install.sh -y
+RUN rm elan-install.sh
 RUN . /home/user/.elan/env
 RUN /home/user/.elan/bin/elan self update
 RUN /home/user/.elan/bin/elan toolchain install v4.14.0-rc1
 
-COPY --chown=user lean-egg lean-egg
-WORKDIR /home/user/lean-egg
-
-
-#Build Lean-Egg
-RUN /home/user/.elan/bin/lake update
-RUN    /home/user/.elan/bin/lake build
+COPY --chown=user . .
 
 CMD ["/usr/bin/bash"]
