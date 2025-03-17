@@ -3,10 +3,8 @@ Slotted E-Graphs - Artifact
 
 In this repository, we will collect the benchmarks from our paper into one artifact.
 
-The main entry point of our benchmarks are the `docker-entry.sh` file, it builds a Docker container and runs all benchmarks within it.
 Each of the three benchmarks corresponds to a folder (functional-array-language, lean-egg, sdql) with a `main.sh` file in it.
 This `main.sh` is the entry point of that benchmark and will be ran only within the docker image.
-
 
 ## Functional Array Language
 
