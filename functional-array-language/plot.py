@@ -12,6 +12,8 @@ import os
 # call like `python3 plot.py outputs/`
 workdir = sys.argv[1]
 
+os.system("mkdir -p plots")
+
 def lastIterationAndTotalFromCSV(path, columns, columns_from_last_iteration, columns_as_total):
   data = pd.read_csv(path, names=[ n for n, _ in columns.items() ], skipinitialspace=True)
   data = data.astype(columns)
