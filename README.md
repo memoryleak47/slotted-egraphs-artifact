@@ -4,6 +4,10 @@ Slotted E-Graphs - Artifact
 In this repository, we will collect the benchmarks from our paper into one artifact.
 
 
+## Functional Array Language
+
+
+
 ## Lean Tactic Case Study
 
 To reproduce the Lean case study, first ensure that the `lean-egg` project can be built:
