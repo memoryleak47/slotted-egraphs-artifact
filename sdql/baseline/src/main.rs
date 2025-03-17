@@ -87,7 +87,7 @@ fn main() {
     let mut extractor = Extractor::new(&runner.egraph, cost_func);
     let (best_cost, best) = extractor.find_best(runner.roots[0]);
     let memory = memory_stats().expect("could not get current memory usage");
-    println!("{} & slotted & {} & {} & {} & {} & {:.2}", filename, runner.iterations.len(), 
+    println!("{} & egg & {} & {} & {} & {} & {:.2}", filename, runner.iterations.len(), 
         thousand_seperator(runner.egraph.total_number_of_nodes()), 
         thousand_seperator(runner.egraph.number_of_classes()),
         if matches!(runner.stop_reason.as_ref().unwrap(), egg::StopReason::Saturated) {"\\yes"} else {"\\no"},
