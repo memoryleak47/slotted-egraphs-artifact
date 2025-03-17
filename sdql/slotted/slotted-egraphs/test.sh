@@ -1,0 +1,1 @@
+RUSTFLAGS=-Awarnings cargo test sdql --release -- --nocapture 

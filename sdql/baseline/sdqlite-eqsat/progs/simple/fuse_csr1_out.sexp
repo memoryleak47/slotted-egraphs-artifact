@@ -1,0 +1,1 @@
+(lambda var_1 (lambda var_2 (sum var_3 var_4 (range 1 (var var_2)) (get (var var_1) (var var_4)))))

@@ -1,0 +1,45 @@
+---- batax_v0 ----
+  Stop reason: TimeLimit
+  Iterations: 12
+  Egraph size: 18851 nodes, 3078 classes
+  Total time: 124.871488125
+  Physical Memory: 292208640
+  Virtual Memory: 422727483392
+12 & 18851 & 3078 & \no & 278.67
+Final Cost: 37012014
+---- mmm_sum_v0 ----
+  Stop reason: Saturated
+  Iterations: 5
+  Egraph size: 30 nodes, 15 classes
+  Total time: 0.03938375
+  Physical Memory: 2818048
+  Virtual Memory: 420476469248
+5 & 30 & 15 & \yes & 2.69
+Final Cost: 12037007
+---- mmm_v0 ----
+  Stop reason: Saturated
+  Iterations: 9
+  Egraph size: 130 nodes, 27 classes
+  Total time: 0.173144625
+  Physical Memory: 3784704
+  Virtual Memory: 420744904704
+9 & 130 & 27 & \yes & 3.61
+Final Cost: 37061007
+---- mttkrp_v0 ----
+  Stop reason: Saturated
+  Iterations: 8
+  Egraph size: 466 nodes, 59 classes
+  Total time: 0.726548166
+  Physical Memory: 6176768
+  Virtual Memory: 420591812608
+8 & 466 & 59 & \yes & 5.89
+Final Cost: 62067031061008
+---- ttm_v0 ----
+  Stop reason: Saturated
+  Iterations: 9
+  Egraph size: 280 nodes, 47 classes
+  Total time: 0.46933525
+  Physical Memory: 4243456
+  Virtual Memory: 420591812608
+9 & 280 & 47 & \yes & 4.05
+Final Cost: 37061061061007

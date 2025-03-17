@@ -1,0 +1,1 @@
+(lambda var_1 (lambda var_2 (let var_3 (+ (* (var var_1) (var var_2)) (* (var var_1) (* (var var_2) (var var_2)))) (+ (var var_3) (* (var var_3) (var var_2))))))

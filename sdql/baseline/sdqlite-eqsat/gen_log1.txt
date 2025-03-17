@@ -1,0 +1,65 @@
+batax_v0
+Runner report
+=============
+  Stop reason: Other("Out of Memory")
+  Iterations: 148
+  Egraph size: 1401722 nodes, 1108225 classes, 1470449 memo
+  Rebuilds: 24989, 168.84 per iter
+  Total time: 25.500050622999996
+    Search:  (0.52) 13.170898415000003
+    Apply:   (0.41) 10.42820587
+    Rebuild: (0.07) 1.900840123
+148 & 1,401,722 & 1,108,225 & \no & 1570.02
+Final Cost: 37012014
+mmm_sum_v0
+Runner report
+=============
+  Stop reason: Saturated
+  Iterations: 10
+  Egraph size: 84 nodes, 34 classes, 107 memo
+  Rebuilds: 4, 0.40 per iter
+  Total time: 0.001838666
+    Search:  (0.52) 0.0009517899999999999
+    Apply:   (0.35) 0.000637876
+    Rebuild: (0.13) 0.000245333
+10 & 84 & 34 & \yes & 2.22
+Final Cost: 12037007
+mmm_v0
+Runner report
+=============
+  Stop reason: Saturated
+  Iterations: 18
+  Egraph size: 673 nodes, 151 classes, 846 memo
+  Rebuilds: 15, 0.83 per iter
+  Total time: 0.016390418
+    Search:  (0.48) 0.007858003
+    Apply:   (0.35) 0.005751085
+    Rebuild: (0.17) 0.002770708
+18 & 673 & 151 & \yes & 2.78
+Final Cost: 37061007
+mttkrp_v0
+Runner report
+=============
+  Stop reason: Saturated
+  Iterations: 18
+  Egraph size: 2240 nodes, 300 classes, 3257 memo
+  Rebuilds: 92, 5.11 per iter
+  Total time: 0.046211581999999994
+    Search:  (0.39) 0.018172459
+    Apply:   (0.41) 0.018734875999999998
+    Rebuild: (0.20) 0.009300122999999999
+18 & 2,240 & 300 & \yes & 3.61
+Final Cost: 62067031061008
+ttm_v0
+Runner report
+=============
+  Stop reason: Saturated
+  Iterations: 17
+  Egraph size: 2655 nodes, 298 classes, 3483 memo
+  Rebuilds: 44, 2.59 per iter
+  Total time: 0.033683208
+    Search:  (0.43) 0.014580042
+    Apply:   (0.45) 0.015152875000000001
+    Rebuild: (0.12) 0.003946128
+17 & 2,655 & 298 & \yes & 3.28
+Final Cost: 37061061061007

@@ -1,0 +1,1 @@
+(lambda var_1 (lambda var_2 (* (sum var_3 var_4 (var var_1) 15) (sum var_3 var_4 (var var_2) (var var_4)))))

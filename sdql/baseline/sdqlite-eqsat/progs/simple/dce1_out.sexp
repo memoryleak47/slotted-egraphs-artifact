@@ -1,0 +1,1 @@
+(lambda var_1 (var var_1))

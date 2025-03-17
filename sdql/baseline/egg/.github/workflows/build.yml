@@ -1,0 +1,41 @@
+name: Build and Test
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Cache cargo bin
+      uses: actions/cache@v2
+      with:
+        path: ~/.cargo/bin
+        key: ${{ runner.os }}-cargo-bin
+    - name: Install graphviz
+      run: sudo apt-get install graphviz
+    - name: Test
+      run: make test
+  nits:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install cargo deadlinks
+      run: |
+        curl -L -o ~/.cargo/bin/cargo-deadlinks https://github.com/deadlinks/cargo-deadlinks/releases/download/0.4.2/deadlinks-linux
+        chmod +x ~/.cargo/bin/cargo-deadlinks
+        cargo deadlinks --version
+    - name: Nits
+      run: make nits
+  bench:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Cache cargo bin
+      uses: actions/cache@v2
+      with:
+        path: ~/.cargo/bin
+        key: ${{ runner.os }}-cargo-bin
+    - name: Install valgrind
+      run: sudo apt-get install valgrind
+    - name: Bench
+      run: cargo bench

@@ -1,0 +1,28 @@
+old:
+mttkrp_v7_csf_csr_csc_unfused
+Runner report
+=============
+  Stop reason: Saturated
+  Iterations: 419
+  Egraph size: 1256975 nodes, 76589 classes, 2015081 memo
+  Rebuilds: 30190, 72.05 per iter
+  Total time: 153.83864400000007
+    Search:  (0.54) 83.79958595899994
+    Apply:   (0.42) 64.553510668
+    Rebuild: (0.04) 5.485380620999999
+419 & 1,256,975 & 76,589 & \yes & 1000.48
+Final Cost: 505094326017
+new:
+mttkrp_v7_csf_csr_csc_unfused
+Runner report
+=============
+  Stop reason: TimeLimit(900.212552417)
+  Iterations: 534
+  Egraph size: 5016818 nodes, 258240 classes, 10451181 memo
+  Rebuilds: 408458, 764.90 per iter
+  Total time: 899.9653398550001
+    Search:  (0.51) 460.67040310999994
+    Apply:   (0.45) 402.97380478800005
+    Rebuild: (0.04) 36.32091721599998
+534 & 5,016,818 & 258,240 & \no & 3726.02
+Final Cost: 553454326017

@@ -1,0 +1,1 @@
+(lambda var_1 (lambda var_2 (get (var var_1) (* (var var_2) 22))))

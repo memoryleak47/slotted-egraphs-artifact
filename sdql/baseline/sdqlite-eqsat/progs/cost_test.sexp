@@ -1,0 +1,1 @@
+(lambda (lambda (lambda (lambda (sum "%3" (sing "%1" (sum (range 1 "%2") (sing (unique "%0") (let (unique "%0") (sum "%4" (* "%0" (let "%1" (let "%0" (get "%9" (+ (* (- "%3" 1) "%8") "%0")))))))))))))))
