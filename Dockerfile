@@ -48,6 +48,7 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 RUN curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf > elan-install.sh
 RUN chmod +x elan-install.sh
 RUN ./elan-install.sh -y
+RUN rm elan-install.sh
 RUN . /home/user/.elan/env
 RUN /home/user/.elan/bin/elan self update
 RUN /home/user/.elan/bin/elan toolchain install v4.14.0-rc1
