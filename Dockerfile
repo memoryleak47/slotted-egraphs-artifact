@@ -32,14 +32,15 @@ RUN apt -y upgrade
 RUN apt-get update && apt-get install -y \
     git \
     curl \
-    sudo \
-    python3-matplotlib \
-    python3-pandas
+    sudo
 
 # Create a regular user
 RUN useradd --user-group --system --create-home --no-log-init user
 USER user
 WORKDIR /home/user
+
+# Install the uv package manager
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # Install Elan
 RUN curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf > elan-install.sh

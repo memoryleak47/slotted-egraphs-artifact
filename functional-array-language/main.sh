@@ -1,5 +1,5 @@
 #!/bin/bash
 
 echo "Running functional array language:"
-python3 run.py
-python3 plot.py outputs
+uv run run.py
+uv run plot.py outputs
