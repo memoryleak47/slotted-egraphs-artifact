@@ -6,6 +6,15 @@ In this repository, we will collect the benchmarks from our paper into one artif
 
 ## Functional Array Language
 
+To reproduce the Functional Array Language case study, run the `./run.sh` script in the functional-array-language folder.
+
+It should compile both egg-rise and slotted-rise (which also includes the slotted-db module),
+
+and run them accordingly.
+
+
+You should find the results in the `outputs` folder.
+
 
 
 ## Lean Tactic Case Study
