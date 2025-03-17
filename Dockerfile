@@ -50,11 +50,5 @@ RUN /home/user/.elan/bin/elan self update
 RUN /home/user/.elan/bin/elan toolchain install v4.14.0-rc1
 
 COPY --chown=user . artifact
-WORKDIR /home/user/artifact/lean-egg
-
-
-#Build Lean-Egg
-RUN /home/user/.elan/bin/lake update
-RUN    /home/user/.elan/bin/lake build
 
 CMD ["/usr/bin/bash"]
