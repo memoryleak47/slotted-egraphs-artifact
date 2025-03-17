@@ -19,6 +19,17 @@ After running sufficiently many tests, you can abort `run.sh`; and run `python3 
 
 This should generate the output graphs from Figure 8 of our paper.
 
+## SDQL
+
+In order to benchmark all files from the baseline (using egg), you need to go to
+the folder `sdql/baseline/sdqlite-eqsat` and run `bench.sh`.
+Similarly, in order to run the slotted version, go to `sdql/slotted/slotted-egraphs/slotted-sdql` and run `bench.sh`.
+
+In both cases, the results will be written to `gen_log1.txt` and `gen_log2.txt` (TODO: explain why two separate files).
+
+The results from this Table correspond to Table 1 in our paper.
+
+
 ## Lean Tactic Case Study
 
 To reproduce the Lean case study, first ensure that the `lean-egg` project can be built:
