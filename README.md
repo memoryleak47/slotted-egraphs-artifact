@@ -29,6 +29,10 @@ In both cases, the results will be written to `gen_log1.txt` and `gen_log2.txt` 
 
 The results from this Table correspond to Table 1 in our paper.
 
+The baseline uses egg with one small change (see [here](https://github.com/amirsh/egg/commit/5b19ed7dd5870a42370d5fb8825410072f51410c)): When counting the number of e-nodes in the Runner, we use `total_number_of_nodes` instead of `total_size`.
+This is a fairer comparison, as eggs `total_size` also counts e-nodes that could have been cleaned up -- and are cleaned up in our slotted implementation.
+
+
 
 ## Lean Tactic Case Study
 
