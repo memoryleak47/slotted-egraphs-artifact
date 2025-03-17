@@ -32,7 +32,9 @@ RUN apt -y upgrade
 RUN apt-get update && apt-get install -y \
     git \
     curl \
-    sudo
+    sudo \
+    python3-matplotlib \
+    python3-pandas
 
 # Create a regular user
 RUN useradd --user-group --system --create-home --no-log-init user
@@ -47,12 +49,6 @@ RUN . /home/user/.elan/env
 RUN /home/user/.elan/bin/elan self update
 RUN /home/user/.elan/bin/elan toolchain install v4.14.0-rc1
 
-COPY --chown=user lean-egg lean-egg
-WORKDIR /home/user/lean-egg
-
-
-#Build Lean-Egg
-RUN /home/user/.elan/bin/lake update
-RUN    /home/user/.elan/bin/lake build
+COPY --chown=user . artifact
 
 CMD ["/usr/bin/bash"]
