@@ -15,7 +15,7 @@ and run them accordingly.
 
 You should find the results in the `outputs` folder.
 
-After running sufficiently many tests, you can abort `run.sh`; and run `python3 plot.py outputs`.
+After running sufficiently many tests, you can abort `run.sh`; and run `python3 plot.py outputs`. You will need to have pandas and matplotlib installed for that.
 
 This should generate the output graphs from Figure 8 of our paper.
 
