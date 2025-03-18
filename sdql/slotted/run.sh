@@ -1,1 +1,1 @@
-RUSTFLAGS=-Awarnings cargo run --release -- $1
+RUSTFLAGS=-Awarnings cargo run --release -- $1 $2 $3

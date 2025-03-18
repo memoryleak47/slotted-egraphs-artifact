@@ -1,12 +1,14 @@
-stage1=("batax_v0" "mmm_sum_v0" "mmm_v0" "mttkrp_v0" "ttm_v0")
-stage2=("batax_v7_csr_dense_unfused" "mmm_sum_v7_csc_csr_unfused" "mmm_v7_csr_csr_unfused" "mttkrp_v7_csf_csr_csc_unfused" "ttm_v1_csf_csr_unfused")
+stage1=("mmm_sum_1st" "mttkrp_1st" "mmm_1st" "ttm_1st" "batax_1st")
+stage2=("mmm_sum_2nd" "mttkrp_2nd" "mmm_2nd" "ttm_2nd" "batax_2nd")
+
+echo "Kernel & System & Iters. & Nodes & Classes & Saturated & Memory (MB)" >> bench.txt
 
 for file in "${stage1[@]}"
 do
-  eval "sh run.sh $file" >> gen_log1.txt
+  eval "sh run.sh $file e2e fine" >> bench.txt
 done
 
 for file in "${stage2[@]}"
 do
-  eval "sh run.sh $file" >> gen_log2.txt
+  eval "sh run.sh $file e2e fine" >> bench.txt
 done

@@ -1,1 +1,0 @@
-(lambda var_1 (lambda var_2 (* 1.5 (sum var_3 var_4 (var var_1) (var var_4)))))

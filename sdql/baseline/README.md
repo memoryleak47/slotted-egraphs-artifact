@@ -1,19 +1,9 @@
-# SDQLite with EQSAT
+# SDQLite with EQSAT on EGG
 
-## Compilation
-
-```
-cd ..
-git clone https://github.com/amirsh/egg.git
-cd egg
-git checkout slotted-db
-cd ../sdqlite-eqsat
 ```
 
 ## Running
 
-`./run.sh sexp_filename`
+`./bench.sh`
 
-For example:
-
-`./run.sh batax_v0`
+`./mttkrp.sh`

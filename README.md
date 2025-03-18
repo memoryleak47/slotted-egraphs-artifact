@@ -20,22 +20,53 @@ This should generate the output graphs from Figure 8 of our paper.
 
 ## SDQL
 
-In order to benchmark all files from the baseline (using egg), you need to go to
-the folder `sdql/baseline` and run `bench.sh`.
-Similarly, in order to run the slotted version, go to `sdql/slotted` and run `bench.sh`.
+In order to benchmark all files, you need to go to
+the folder `sdql` and run `main.sh`.
 
-In both cases, the results will be written to `gen_log1.txt` and `gen_log2.txt` (TODO: explain why two separate files).
-
-The results from this Table correspond to Table 1 in our paper.
+In both cases, the results will be written to `bench.txt` and `mttkrp.txt` in each
+folder `baseline` and `slotted`.
+The results from `bench.txt` correspond to Table 1 in our paper, while
+the results from `mttkrp.txt` correspond to Table 2.
 
 The baseline uses egg with one small change (see [here](https://github.com/amirsh/egg/commit/5b19ed7dd5870a42370d5fb8825410072f51410c)): When counting the number of e-nodes in the Runner, we use `total_number_of_nodes` instead of `total_size`.
 This is a fairer comparison, as eggs `total_size` also counts e-nodes that could have been cleaned up -- and are cleaned up in our slotted implementation.
 
 
 
-## Lean Tactic Case Study
+## Lean Tactic
+
+To properly inspect the statements, proofs, and metrics of the theorems shown in Section 4.3, we require a setup which allows interaction with the `lean-egg` project contained in this artifact.
+
+### Setup
+
+#### Without Docker
+
+If you already have an installation of Lean and its package manager `lake`, start by building the `lean-egg` project:
+
+```bash
+$ cd lean-egg && lake build
+```
+
+Then, navigate into the `lean-egg` directory and open the `lean-egg/Lean/Egg/Tests/PLDI.lean` test file in your Lean-editor of choice (below we assume VS Code). Continue reading at the [Content](#content) section below.
+
+#### With Docker
+
+To reproduce the Lean case study with Docker we assume that you have [Docker](https://docs.docker.com/get-started/get-docker/) installed.
+
+##### Non-Interactive Version
 
 The `main.sh` script in `lean-egg` will run lean to check the test file `lean-egg/Lean/Egg/Tests/PLDI.lean` in a non-interactive session.
+
+##### Interactive Version with VS Code
+
+Alternatively, you can use [VS Code](https://code.visualstudio.com) with the [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension.
+
+To run the docker container from VS Code, open the command palette (Ctrl+Shift+P or Cmd+Shift+P) and run the `Dev Containers: Open Fold in Container...` command. 
+Select the root directory (the one containing this `README`) as the target folder.
+
+> *Troubleshooting:* If the command fails, try erasing any `.tar` file in the root directory, if present. Then run the command again.
+
+If the docker container is successfully running with VS Code, open the `lean-egg/Lean/Egg/Tests/PLDI.lean` test file.
 
 ### Content
 
