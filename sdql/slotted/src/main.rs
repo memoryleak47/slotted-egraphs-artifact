@@ -63,9 +63,9 @@ fn main() {
     //     timeout = 120;
     // }
     let iter_limit = if filename == "batax_1st" {
-        12
+        13
     } else if filename == "batax_2nd" {
-        11
+        12
     } else {
         30
     };
