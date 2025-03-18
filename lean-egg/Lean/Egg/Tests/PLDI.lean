@@ -93,6 +93,7 @@ set_option egg.slotted true
 -- Notable:
 -- * Total time < 1 second
 -- * 19 explanation steps
+#print "[slotted] not_supPrime : ¬SupPrime a ↔ IsMin a ∨ ∃ b c, a ≤ b ⊔ c ∧ ¬a ≤ b ∧ ¬a ≤ c"
 theorem not_supPrime : ¬SupPrime a ↔ IsMin a ∨ ∃ b c, a ≤ b ⊔ c ∧ ¬a ≤ b ∧ ¬a ≤ c := by
   egg [not_forall, not_exists, not_or, not_not, not_and, not_imp, not_iff_iff_and_not_or_not_and,
        SupPrime]
@@ -103,6 +104,7 @@ include sup_eq_left sup_eq_right left_lt_sup right_lt_sup
 -- Notable:
 -- * Total time < 1 second
 -- * 18 explanation steps
+#print "[slotted] not_supIrred : ¬SupIrred a ↔ IsMin a ∨ ∃ b c, b ⊔ c = a ∧ b < a ∧ c < a"
 theorem not_supIrred : ¬SupIrred a ↔ IsMin a ∨ ∃ b c, b ⊔ c = a ∧ b < a ∧ c < a := by
   have h x y : x ⊔ y = a ∧ ¬x = a ∧ ¬y = a ↔ x ⊔ y = a ∧ x < a ∧ y < a := by
     simp +contextual [@eq_comm _ _ a, ne_eq, and_congr_right_iff,
@@ -133,6 +135,8 @@ set_option egg.slotted false
 --    set_option egg.explLengthLimit <num>
 --
 -- Note that this may cause the tactic to take multiple minutes to complete.
+#print "[egg] not_supPrime : ¬SupPrime a ↔ IsMin a ∨ ∃ b c, a ≤ b ⊔ c ∧ ¬a ≤ b ∧ ¬a ≤ c"
+
 theorem not_supPrime : ¬SupPrime a ↔ IsMin a ∨ ∃ b c, a ≤ b ⊔ c ∧ ¬a ≤ b ∧ ¬a ≤ c := by
   egg [not_forall, not_exists, not_or, not_not, not_and, not_imp, not_iff_iff_and_not_or_not_and,
        SupPrime]
@@ -145,6 +149,9 @@ include sup_eq_left sup_eq_right left_lt_sup right_lt_sup
 --          backend in less than 1 second above. To inspect intermediate results, reduce the time
 --          limit to a value like 10 (seconds) below. Note how quickly the number of e-nodes and
 --          e-classes grows (by hovering over the tactic call and inspecting the info message).
+
+#print "[egg] not_supIrred : ¬SupIrred a ↔ IsMin a ∨ ∃ b c, b ⊔ c = a ∧ b < a ∧ c < a"
+
 set_option egg.timeLimit 1000000000000000000 in
 theorem not_supIrred : ¬SupIrred a ↔ IsMin a ∨ ∃ b c, b ⊔ c = a ∧ b < a ∧ c < a := by
   have h x y : x ⊔ y = a ∧ ¬x = a ∧ ¬y = a ↔ x ⊔ y = a ∧ x < a ∧ y < a := by

@@ -49,10 +49,15 @@ RUN curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -
 RUN chmod +x elan-install.sh
 RUN ./elan-install.sh -y
 RUN rm elan-install.sh
-RUN . /home/user/.elan/env
+RUN echo ". /home/user/.elan/env" >> /home/user/.bashrc
 RUN /home/user/.elan/bin/elan self update
 RUN /home/user/.elan/bin/elan toolchain install v4.14.0-rc1
 
 COPY --chown=user . .
+
+#Build Lean-Egg
+WORKDIR /home/user/lean-egg
+RUN /home/user/.elan/bin/lake update
+RUN /home/user/.elan/bin/lake build
 
 CMD ["/usr/bin/bash"]
