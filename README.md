@@ -35,14 +35,7 @@ This is a fairer comparison, as eggs `total_size` also counts e-nodes that could
 
 ## Lean Tactic Case Study
 
-To reproduce the Lean case study, first ensure that the `lean-egg` project can be built:
-
-```bash
-$ cd lean-egg
-$ lake build
-```
-
-Once the build completes successfully, open the test file `lean-egg/Lean/Egg/Tests/PLDI.lean` in VS Code. 
+The `main.sh` script in `lean-egg` will run lean to check the test file `lean-egg/Lean/Egg/Tests/PLDI.lean` in a non-interactive session.
 
 ### Content
 
