@@ -10,7 +10,17 @@ There are three sets of benchmarks each with its own folder:
 
 
 ## Dependencies and Docker
-We have bundled all dependencies in a docker container.
+The artifact is packaged in a Docker image. Execute it and run a terminal from it. On MacOS/Windows using Docker desktop, this can be done via a GUI, on a Debian-based machine (like Ubuntu), you can get Docker by running
+```
+sudo apt install docker.io
+```
+
+And load and run the docker image with:
+
+```
+sudo docker load < slotted-image.tar.gz
+sudo docker run -it slotted-image
+```
 
 The docker container has the following dependencies preinstalled:
   - Linux `coreutils`, `git`, `curl`
