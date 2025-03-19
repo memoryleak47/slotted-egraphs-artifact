@@ -63,7 +63,7 @@ To properly inspect the statements, proofs, and metrics of the theorems shown in
 
 ##### Non-Interactive Version
 
-The `main.sh` script in `lean-egg` will run lean to check the test file `lean-egg/Lean/Egg/Tests/PLDI.lean` in a non-interactive session. **This should take about 30 minutes.**
+The `main.sh` script in `lean-egg` will run lean to check the test file `lean-egg/Lean/Egg/Tests/PLDI.lean` in a non-interactive session. **This script will run until the one of the proof attempts runs out of memory, which should take about 30 minutes.**
 The theorems in the file have been checked successfully using equality saturation when the script terminates without producing any error.
 The runtime results reported in the paper can be found in the logs, as described below in [Further Inspection](#further-inspection).
 
