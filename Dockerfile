@@ -61,6 +61,7 @@ RUN /home/user/.elan/bin/lake update
 RUN /home/user/.elan/bin/lake build
 
 # Download and install Python packages
+WORKDIR /home/user/
 RUN /home/user/.local/bin/uv sync
 
 # Download dependencies and build rust projects

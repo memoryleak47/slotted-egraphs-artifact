@@ -1,30 +1,55 @@
 Slotted E-Graphs - Artifact
 ===========================
 
-In this repository, we will collect the benchmarks from our paper into one artifact.
+This repository collects the benchmarks from the paper "Slotted E-Graphs" into one artifact.
 
-Each of the three benchmarks corresponds to a folder (functional-array-language, lean-egg, sdql) with a `main.sh` file in it.
-This `main.sh` is the entry point of that benchmark and will be ran only within the docker image.
+There are three sets of benchmarks each with its own folder: 
+  - `functional-array-language` for the evaluation in Section 4.1
+  - `sdql` for the evaluation in Section 4.2
+  - `lean-egg` for the evaluation in Section 4.3
 
-## Functional Array Language
 
-To reproduce the Functional Array Language case study, run `uv run run.py` in the functional-array-language folder. You will need to the `uv` Python package manager.
+## Dependencies and Docker
+We have bundled all dependencies in a docker container.
 
-It should compile both egg-rise and slotted-rise (which also includes the slotted-db module), and run them accordingly.
+The docker container has the following dependencies preinstalled:
+  - Linux `coreutils`, `git`, `curl`
+  - slotted-egraphs (https://crates.io/crates/slotted-egraphs; version 0.0.26)
+  - egg (https://crates.io/crates/egg)
+  - Rust (version 1.82)
+  - Lean 4 (version 4.14.0-rc1)
+  - uv Python Manager (version 0.6.8)
+  - Python (version 3.12)
+  - Mathplotlib (version 3.10.1)
+  - Pandas (version 2.2.3)
 
-You should find the results in the `outputs` folder.
+You can run all benchmarks from within the docker container without needing to install any additional software.
+You can also run the benchmarks without docker when all dependencies are installed.
 
-After running sufficiently many tests, you can abort `run.py`; and run `uv run plot.py outputs`. The `uv` package manager should have taken care of installing pandas and matplotlib.
 
-This should generate the output graphs from Figure 8 of our paper.
+## Slotted implementation
+You can inspect the implementation of Slotted E-Graphs.
+Each subfolder contains a copy of the Rust implementation (`functional-array-language\slotted-egraphs`, `sdql\slotted\slotted-egraphs`, `lean-egg\Rust\Slotted`).
+All these versions are identical with minor configuration differences.
 
-## SDQL
 
-In order to benchmark all files, you need to go to
-the folder `sdql` and run `main.sh`.
+## Functional Array Language (Section 4.1)
 
-In both cases, the results will be written to `bench.txt` and `mttkrp.txt` in each
-folder `baseline` and `slotted`.
+To reproduce Figure 8 from the Functional Array Language case study, run `uv run run.py` in the `functional-array-language` folder. **This should take about 5 minutes.**
+
+The results are written to the `outputs` subfolder.
+
+To produce the plots from Figure 8 run `uv run plot.py outputs`.
+
+This generates the output graphs from Figure 8 of our paper in the `plots` subfolder.
+
+
+## SDQL (Section 4.2)
+
+To run all benchmarks from Table 1 and 2, you need to go to the folder `sdql` and run `main.sh`.
+**This should take about two hours.**
+
+The results will be written to `bench.txt` and `mttkrp.txt` in each subfolder `baseline` and `slotted`.
 The results from `bench.txt` correspond to Table 1 in our paper, while
 the results from `mttkrp.txt` correspond to Table 2.
 
@@ -32,26 +57,9 @@ The baseline uses egg with one small change (see [here](https://github.com/amirs
 This is a fairer comparison, as eggs `total_size` also counts e-nodes that could have been cleaned up -- and are cleaned up in our slotted implementation.
 
 
-
-## Lean Tactic
+## Lean Tactic (Section 4.3)
 
 To properly inspect the statements, proofs, and metrics of the theorems shown in Section 4.3, we require a setup which allows interaction with the `lean-egg` project contained in this artifact.
-
-### Setup
-
-#### Without Docker
-
-If you already have an installation of Lean and its package manager `lake`, start by building the `lean-egg` project:
-
-```bash
-$ cd lean-egg && lake build
-```
-
-Then, navigate into the `lean-egg` directory and open the `lean-egg/Lean/Egg/Tests/PLDI.lean` test file in your Lean-editor of choice (below we assume VS Code). Continue reading at the [Content](#content) section below.
-
-#### With Docker
-
-To reproduce the Lean case study with Docker we assume that you have [Docker](https://docs.docker.com/get-started/get-docker/) installed.
 
 ##### Non-Interactive Version
 
@@ -67,6 +75,16 @@ Select the root directory (the one containing this `README`) as the target folde
 > *Troubleshooting:* If the command fails, try erasing any `.tar` file in the root directory, if present. Then run the command again.
 
 If the docker container is successfully running with VS Code, open the `lean-egg/Lean/Egg/Tests/PLDI.lean` test file.
+
+#### Setup Without Docker
+
+If you already have an installation of Lean and its package manager `lake`, start by building the `lean-egg` project:
+
+```bash
+$ cd lean-egg && lake build
+```
+
+Then, navigate into the `lean-egg` directory and open the `lean-egg/Lean/Egg/Tests/PLDI.lean` test file in your Lean-editor of choice (below we assume VS Code).
 
 ### Content
 
