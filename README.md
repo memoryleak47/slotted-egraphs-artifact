@@ -25,11 +25,10 @@ The docker container has the following dependencies preinstalled:
 
 You can run the benchmarks without docker when all dependencies are installed.
 You can run the benchmarks also from within the docker container without needing to install any additional software.
-To build the docker container image, run `./build-image.sh` and to start a container run `./use-image.sh`.
 
 ## Slotted implementation
 You can inspect the implementation of Slotted E-Graphs.
-Each subfolder contains a copy of the Rust implementation (`functional-array-language\slotted-egraphs`, `sdql\slotted\slotted-egraphs`, `lean-egg\Rust\Slotted`).
+Each subfolder contains a copy of the Rust implementation (`functional-array-language/slotted-egraphs`, `sdql/slotted/slotted-egraphs`, `lean-egg/Rust/Slotted`).
 All these versions are identical with minor configuration differences.
 
 
