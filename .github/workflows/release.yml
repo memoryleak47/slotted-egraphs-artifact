@@ -1,0 +1,32 @@
+name: Build and Upload Docker Image to GitHub Release
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up Docker
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
+
+      # Build the Docker image
+      - name: Build Docker image
+        run: ./build-image.sh
+
+      # Upload the Docker image as a release asset
+      - name: Upload Docker image
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./slotted-image.tar
+          asset_name: slotted-image.tar
+          content_type: application/gzip
