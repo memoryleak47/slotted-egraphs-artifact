@@ -60,4 +60,13 @@ WORKDIR /home/user/lean-egg
 RUN /home/user/.elan/bin/lake update
 RUN /home/user/.elan/bin/lake build
 
+# Download and install Python packages
+RUN /home/user/.local/bin/uv sync
+
+# Download dependencies and build rust projects
+RUN cd /home/user/functional-array-language/egg-rise; cargo build --release
+RUN cd /home/user/functional-array-language/slotted-rise; cargo build --release
+RUN cd /home/user/sdql/baseline; cargo build --release
+RUN cd /home/user/sdql/slotted; cargo build --release
+
 CMD ["/usr/bin/bash"]

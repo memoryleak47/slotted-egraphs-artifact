@@ -117,27 +117,27 @@ for O in range(0, 11):
     may_run_one_variant(fs, "slotted", "./slotted-rise/target/release/slotted-rise", "slot", N, M, O, VARS)
     may_run_one_variant(fsdb, "slotted-db", "./slotted-rise/target/release/slotted-rise", "de-bruijn", N, M, O, VARS)
 
-fdb = [None]
-fs = [None]
-fsdb = [None]
-for M in range(1, 11):
-    N = 2
-    O = 2
-    lhs, rhs = generate(N, M, O, VARS)
-    may_run_one_variant(fdb, "egg-db", "./egg-rise/target/release/egg-rise", "de-bruijn", N, M, O, VARS)
-    may_run_one_variant(fs, "slotted", "./slotted-rise/target/release/slotted-rise", "slot", N, M, O, VARS)
-    may_run_one_variant(fsdb, "slotted-db", "./slotted-rise/target/release/slotted-rise", "de-bruijn", N, M, O, VARS)
+# fdb = [None]
+# fs = [None]
+# fsdb = [None]
+# for M in range(1, 11):
+#     N = 2
+#     O = 2
+#     lhs, rhs = generate(N, M, O, VARS)
+#     may_run_one_variant(fdb, "egg-db", "./egg-rise/target/release/egg-rise", "de-bruijn", N, M, O, VARS)
+#     may_run_one_variant(fs, "slotted", "./slotted-rise/target/release/slotted-rise", "slot", N, M, O, VARS)
+#     may_run_one_variant(fsdb, "slotted-db", "./slotted-rise/target/release/slotted-rise", "de-bruijn", N, M, O, VARS)
 
-fdb = [None]
-fs = [None]
-fsdb = [None]
-for N in range(1, 11):
-    M = 2
-    O = 2
-    lhs, rhs = generate(N, M, O, VARS)
-    may_run_one_variant(fdb, "egg-db", "./egg-rise/target/release/egg-rise", "de-bruijn", N, M, O, VARS)
-    may_run_one_variant(fs, "slotted", "./slotted-rise/target/release/slotted-rise", "slot", N, M, O, VARS)
-    may_run_one_variant(fsdb, "slotted-db", "./slotted-rise/target/release/slotted-rise", "de-bruijn", N, M, O, VARS)
+# fdb = [None]
+# fs = [None]
+# fsdb = [None]
+# for N in range(1, 11):
+#     M = 2
+#     O = 2
+#     lhs, rhs = generate(N, M, O, VARS)
+#     may_run_one_variant(fdb, "egg-db", "./egg-rise/target/release/egg-rise", "de-bruijn", N, M, O, VARS)
+#     may_run_one_variant(fs, "slotted", "./slotted-rise/target/release/slotted-rise", "slot", N, M, O, VARS)
+#     may_run_one_variant(fsdb, "slotted-db", "./slotted-rise/target/release/slotted-rise", "de-bruijn", N, M, O, VARS)
 
 """
 DeBruijn saturates but fails to prove: λz. λx. ((λy. z) x) x = λz. z

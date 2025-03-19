@@ -222,8 +222,8 @@ def plot_2d_plane(filename_str, plane_str, data, x_axis, y_axis, y_fmt):
 def plot_2d_planes(metric, metric_fmt):
   for (filename_str, plane_str, x_axis, filtered_data) in [
     ("n2-m2", "N = 2, M = 2", "o", data[(data["n"] == 2) & (data["m"] == 2)]),
-    ("n2-o2", "N = 2, O = 2", "m", data[(data["n"] == 2) & (data["o"] == 2)]),
-    ("m2-o2", "M = 2, O = 2", "n", data[(data["m"] == 2) & (data["o"] == 2)])
+    # ("n2-o2", "N = 2, O = 2", "m", data[(data["n"] == 2) & (data["o"] == 2)]),
+    # ("m2-o2", "M = 2, O = 2", "n", data[(data["m"] == 2) & (data["o"] == 2)])
   ]:
     plot_2d_plane(filename_str, plane_str, filtered_data, x_axis, metric, metric_fmt)
 
