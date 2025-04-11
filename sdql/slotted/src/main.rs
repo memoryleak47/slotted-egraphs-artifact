@@ -102,7 +102,36 @@ fn main() {
         if matches!(report.stop_reason, slotted_egraphs::StopReason::Saturated) { "\\yes" } else { "\\no" },
         (memory.physical_mem as f64) / (1024.0 * 1024.0) );
     // may_trace_assert_reaches(lhs, rhs, csv_f, 60);
-    if e2e != "e2e" {
-        println!("Final Cost: {}", get_cost(term));
+    let best_cost = get_cost(term);
+    if e2e == "ind" {
+        let bestcost_file = "../baseline/progs/".to_owned() + filename + "_bestcost.txt";
+        let bestcost_str = fs::read_to_string(bestcost_file).expect("Unable to read cost file");
+        let actual_best_cost: usize = bestcost_str.parse::<usize>().unwrap();
+        if actual_best_cost == best_cost {
+            let mut iter_best_found = 0;
+
+            let mut eg2 = EGraph::<Sdql, SdqlKind>::new();
+            let id2 = eg2.add_syn_expr(prog.clone());
+            let rewrites2 = if coarse == "coarse" {
+                sdql_rules_old()
+            } else {
+                sdql_rules()
+            };
+            run_eqsat(&mut eg2, rewrites2, iter_limit, timeout, move |eg3| {
+                let cost_func = SdqlCost { egraph: &eg3 };
+                let extractor = Extractor::<_, SdqlCost>::new(&eg3, cost_func);
+                let term = extractor.extract(&id2.clone(), &eg3);
+                let best_cost2 = get_cost(term);
+                iter_best_found += 1;
+                if best_cost2 == actual_best_cost {
+                    println!("Best cost found in iteration {}!", iter_best_found);
+                    Err("Best cost found".into())
+                } else {
+                    Ok(())
+                }
+            });
+        } else {
+            println!("Best cost not found!");
+        }
     }
 }
