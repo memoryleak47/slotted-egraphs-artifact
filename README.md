@@ -69,6 +69,7 @@ This is a fairer comparison, as eggs `total_size` also counts e-nodes that could
 ## Lean Tactic (Section 4.3)
 
 To properly inspect the statements, proofs, and metrics of the theorems shown in Section 4.3, we require a setup which allows interaction with the `lean-egg` project contained in this artifact.
+To reproduce the results of the paper, it suffices to run the non-interactive CLI version as follows. If you want to explore further, we recommend the Interactive version below.
 
 ##### Non-Interactive Version
 
@@ -76,26 +77,20 @@ The `main.sh` script in `lean-egg` will run lean to check the test file `lean-eg
 The theorems in the file have been checked successfully using equality saturation when the script terminates without producing any error.
 The runtime results reported in the paper can be found in the logs, as described below in [Further Inspection](#further-inspection).
 
+
 ##### Interactive Version with VS Code
 
-Alternatively, you can use [VS Code](https://code.visualstudio.com) with the [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension.
+Alternatively, you can use [VS Code](https://code.visualstudio.com) with the [Lean4](https://marketplace.visualstudio.com/items?itemName=leanprover.lean4) extension.
 
-To run the docker container from VS Code, open the command palette (Ctrl+Shift+P or Cmd+Shift+P) and run the `Dev Containers: Open Fold in Container...` command. 
-Select the root directory (the one containing this `README`) as the target folder.
-
+> If you want to use VS Code within docker, you need the [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension.
+> To run the docker container from VS Code, open the command palette (Ctrl+Shift+P or Cmd+Shift+P) and run the `Dev Containers: Open Fold in Container...` command.
+> Select the root directory (the one containing this `README`) as the target folder.
 > *Troubleshooting:* If the command fails, try erasing any `.tar` file in the root directory, if present. Then run the command again.
 
-If the docker container is successfully running with VS Code, open the `lean-egg/Lean/Egg/Tests/PLDI.lean` test file.
-
-#### Setup Without Docker
-
-If you already have an installation of Lean and its package manager `lake`, start by building the `lean-egg` project:
-
-```bash
-$ cd lean-egg && lake build
-```
-
-Then, navigate into the `lean-egg` directory and open the `lean-egg/Lean/Egg/Tests/PLDI.lean` test file in your Lean-editor of choice (below we assume VS Code).
+Once you've finished the setup, navigate into the `lean-egg` directory, and
+- open the `lean-egg/Lean/Egg/Tests/PLDI.lean` file in VS Code
+- click on the Lean4 icon (a forall quantifier symbol) at the top-right to open the info view using "Toggle Info View"
+- click on the blue "Restart File" button at the bottom-right to start the Lean analysis.
 
 ### Content
 
