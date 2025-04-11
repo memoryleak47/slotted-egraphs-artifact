@@ -92,21 +92,40 @@ fn main() {
         thousand_seperator(runner.egraph.number_of_classes()),
         if matches!(runner.stop_reason.as_ref().unwrap(), egg::StopReason::Saturated) {"\\yes"} else {"\\no"},
         (memory.physical_mem as f64) / (1024.0 * 1024.0) );
-    // println!("{:?}", runner.egraph);
-    // println!("{}", best);
     let out_str = sdql_print(best, false);
-    // println!("init cost:\t{}", SDQLCost { egraph: &runner.egraph }.cost_rec(&start_expr));
-    if e2e != "e2e" {
-        println!("Final Cost: {}", best_cost);
+    if e2e == "ind" {
+        let bestcost_file = "progs/".to_owned() + filename + "_bestcost.txt";
+        let bestcost_str = fs::read_to_string(bestcost_file).expect("Unable to read cost file");
+        let actual_best_cost: usize = bestcost_str.parse::<usize>().unwrap();
+        if actual_best_cost == best_cost {
+            let mut iter_best_found = 0;
+
+            let mut runner2 = Runner::default()
+                .with_iter_limit(30)
+                .with_node_limit(10_000_000)
+                .with_time_limit(Duration::from_secs(1200));
+
+            runner2 = runner2.with_hook(move |r| {
+                    let cost_func = SDQLCost { egraph: &r.egraph };
+                    let mut extractor = Extractor::new(&r.egraph, cost_func);
+                    let (best_cost2, _) = extractor.find_best(r.roots[0]);
+                    if best_cost2 == actual_best_cost {
+                        iter_best_found = r.iterations.len();
+                        println!("Best cost found in iteration {}!", iter_best_found);
+                        Err("Best cost found".into())
+                    } else {
+                        Ok(())
+                    }
+                });
+            runner2 = runner2.with_expr(&start_expr);
+            runner2 = if coarse == "coarse" {
+                runner2.run(&rules_old())
+            } else {
+                runner2.run(&rules())
+            };
+        } else {
+            println!("Best cost not found!");
+        }
     }
     fs::write(output_file, out_str).expect("Unable to write file");
-    // runner.egraph.dot().to_png("target/out.png").unwrap();
-    // runner.egraph.dot().to_dot("target/out.dot").unwrap();
-
-    // let cost_test_file = "progs/cost_test.sexp";
-    // let cost_test = fs::read_to_string(cost_test_file).expect("Unable to read file").parse().unwrap();
-    // let cost_test_cost = cost_func.cost_rec(&cost_test);
-    // println!("test cost:\t{}", cost_test_cost);
-
-    // println!("{}", runner.explain_equivalence(&start_expr, &best).get_flat_string());
 }
