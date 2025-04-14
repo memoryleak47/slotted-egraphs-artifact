@@ -1,5 +1,6 @@
 #!/usr/bin/python3 -B
 
+import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.ticker as tkr
 import matplotlib.colors as clr
@@ -8,6 +9,10 @@ import pandas as pd
 import math
 import sys
 import os
+
+# Avoid Type 3 non-scaling fonts
+matplotlib.rcParams['pdf.fonttype'] = 42
+matplotlib.rcParams['ps.fonttype'] = 42
 
 # call like `python3 plot.py outputs/`
 workdir = sys.argv[1]
