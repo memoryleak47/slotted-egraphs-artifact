@@ -64,10 +64,6 @@ RUN /home/user/.elan/bin/lake build
 WORKDIR /home/user/
 RUN /home/user/.local/bin/uv sync
 
-
-# remove docker build files
-RUN rm build-image.sh use-image.sh
-
 # Download dependencies and build rust projects
 RUN cd /home/user/functional-array-language/egg-rise; cargo build --release
 RUN cd /home/user/functional-array-language/slotted-rise; cargo build --release
