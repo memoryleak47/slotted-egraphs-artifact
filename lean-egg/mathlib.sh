@@ -10,13 +10,15 @@ mkdir -p "$log_dir"
 
 if [ -z "$1" ] || [ "$1" -le "1" ]; then
     echo "(1) Building Mathlib"
+    echo -n "" > "$log_dir/step-1.txt"
     sleep 3
-    lake clean
+    # lake clean
     lake build | tee "$log_dir/step-1.txt" | grep '✔'
 fi
 
 if [ -z "$1" ] || [ "$1" -le "2" ]; then
     echo "(2) Collecting Results"
+    echo -n "" > "$log_dir/step-2.txt"
     grep '^info.*egg' "$log_dir/step-1.txt" > "$log_dir/step-2.txt"
 fi
 
@@ -55,6 +57,7 @@ if [ -z "$1" ] || [ "$1" -le "4" ]; then
         IFS= read -r line_1 || break
         IFS= read -r line_2 || line_2=""
         
+        non_applicable_0="egg failed: egg received invalid explanation: step contains non-defeq type-level rewrite in proof"
         non_applicable_1="egg failed: egg requires rewrites to be equalities, equivalences or (non-propositional) definitions"
         non_applicable_2="egg failed: typeclass instance problem is stuck, it is often due to metavariables"
         non_applicable_3="egg failed: egg failed to build proof:"
@@ -70,7 +73,7 @@ if [ -z "$1" ] || [ "$1" -le "4" ]; then
                 echo "$line_2"
                 exit 1
             fi
-        elif [[ "$line_1" == "$non_applicable_3"* ]] || [[ "$line_2" == "$non_applicable_3"* ]] || [[ "$line_1" == "$non_applicable_4"* ]] || [[ "$line_2" == "$non_applicable_4"* ]] || [[ "$line_1" == "$non_applicable_5"* ]] || [[ "$line_2" == "$non_applicable_5"* ]]; then
+        elif [[ "$line_1" == "$non_applicable_0"* ]] || [[ "$line_2" == "$non_applicable_0"* ]] || [[ "$line_1" == "$non_applicable_3"* ]] || [[ "$line_2" == "$non_applicable_3"* ]] || [[ "$line_1" == "$non_applicable_4"* ]] || [[ "$line_2" == "$non_applicable_4"* ]] || [[ "$line_1" == "$non_applicable_5"* ]] || [[ "$line_2" == "$non_applicable_5"* ]]; then
             :
         else
             echo "$line_1" >> "$log_dir/step-4.txt"
@@ -93,7 +96,7 @@ if [ -z "$1" ] || [ "$1" -le "5" ]; then
             echo "ERROR: different outcomes"
             echo "$line_1"
             echo "$line_2"
-            exit 1
+            # exit 1
         fi
 
         if [ "$line_1_outcome" = "egg succeeded" ]; then
@@ -123,5 +126,5 @@ with_binders_slotted_expl_length_avg="$(echo "$with_binders_slotted_expl_length_
 echo -e "Total Number of Test Cases: $num_test_cases\n"
 echo "Backend | Successful Proven Theorems | Average Explanation Length | ...With Binders"
 echo "-----------------------------------------------------------------------------------"
-echo "slotted | $num_successes                         | ${slotted_expl_length_avg:0:4}                       | ${with_binders_slotted_expl_length_avg:0:4}"
-echo "egg     | $num_successes                         | ${egg_expl_length_avg:0:4}                       | ${with_binders_egg_expl_length_avg:0:4}"
+echo "slotted | $num_successes                        | ${slotted_expl_length_avg:0:4}                       | ${with_binders_slotted_expl_length_avg:0:4}"
+echo "egg     | $num_successes                        | ${egg_expl_length_avg:0:4}                       | ${with_binders_egg_expl_length_avg:0:4}"

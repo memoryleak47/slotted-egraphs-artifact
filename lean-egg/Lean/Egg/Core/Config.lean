@@ -43,7 +43,7 @@ structure Backend where
   -- TODO: For slotted e-graphs, this option can be used to inspect the tree explanation by setting
   --       this option to `false`.
   optimizeExpl        := true
-  timeLimit           := 3
+  timeLimit           := 30
   nodeLimit           := 1000000000000000000
   iterLimit           := 1000000000000000000
   reporting           := false

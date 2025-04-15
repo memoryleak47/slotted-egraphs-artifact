@@ -31,12 +31,12 @@ open Classical Lean.Omega.Decidable
 --               message.
 set_option egg.reporting true
 
--- These options ensure that the explanations produced by the backends are visible in the
+-- Enable these options to ensure that the explanations produced by the backends are visible in the
 -- *Infoview*. The "Explanation" item shows the raw explanation string as returned by the backend.
 -- The "Explanation Steps" item shows the explanation in a more readable form, as pretty-printed
 -- Lean expressions.
 set_option trace.egg.explanation false
-set_option trace.egg.explanation.steps true
+set_option trace.egg.explanation.steps false
 
 
 
@@ -93,7 +93,7 @@ set_option egg.slotted true
 -- Notable:
 -- * Total time < 1 second
 -- * 14 explanation steps
-#print "[slotted] not_supPrime : ¬SupPrime a ↔ IsMin a ∨ ∃ b c, a ≤ b ⊔ c ∧ ¬a ≤ b ∧ ¬a ≤ c"
+#print "\n\n[slotted] Proving 'not_supPrime : ¬SupPrime a ↔ IsMin a ∨ ∃ b c, a ≤ b ⊔ c ∧ ¬a ≤ b ∧ ¬a ≤ c'\n\n"
 theorem not_supPrime : ¬SupPrime a ↔ IsMin a ∨ ∃ b c, a ≤ b ⊔ c ∧ ¬a ≤ b ∧ ¬a ≤ c := by
   egg [not_forall, not_exists, not_or, not_not, not_and, not_imp, not_iff_iff_and_not_or_not_and,
        SupPrime]
@@ -104,7 +104,7 @@ include sup_eq_left sup_eq_right left_lt_sup right_lt_sup
 -- Notable:
 -- * Total time < 1 second
 -- * 15 explanation steps
-#print "[slotted] not_supIrred : ¬SupIrred a ↔ IsMin a ∨ ∃ b c, b ⊔ c = a ∧ b < a ∧ c < a"
+#print "\n\n[slotted] Proving 'not_supIrred : ¬SupIrred a ↔ IsMin a ∨ ∃ b c, b ⊔ c = a ∧ b < a ∧ c < a'\n\n"
 theorem not_supIrred : ¬SupIrred a ↔ IsMin a ∨ ∃ b c, b ⊔ c = a ∧ b < a ∧ c < a := by
   have h x y : x ⊔ y = a ∧ ¬x = a ∧ ¬y = a ↔ x ⊔ y = a ∧ x < a ∧ y < a := by
     simp +contextual [@eq_comm _ _ a, ne_eq, and_congr_right_iff,
@@ -135,7 +135,7 @@ set_option egg.slotted false
 --    set_option egg.explLengthLimit <num>
 --
 -- Note that this may cause the tactic to take multiple minutes to complete.
-#print "[egg] not_supPrime : ¬SupPrime a ↔ IsMin a ∨ ∃ b c, a ≤ b ⊔ c ∧ ¬a ≤ b ∧ ¬a ≤ c"
+#print "\n\n[egg] Proving 'not_supPrime : ¬SupPrime a ↔ IsMin a ∨ ∃ b c, a ≤ b ⊔ c ∧ ¬a ≤ b ∧ ¬a ≤ c'\n\n"
 theorem not_supPrime : ¬SupPrime a ↔ IsMin a ∨ ∃ b c, a ≤ b ⊔ c ∧ ¬a ≤ b ∧ ¬a ≤ c := by
   egg [not_forall, not_exists, not_or, not_not, not_and, not_imp, not_iff_iff_and_not_or_not_and,
        SupPrime]
@@ -149,7 +149,7 @@ include sup_eq_left sup_eq_right left_lt_sup right_lt_sup
 --          limit to a value like 10 (seconds) below. Note how quickly the number of e-nodes and
 --          e-classes grows (by hovering over the tactic call and inspecting the info message).
 
-#print "[egg] not_supIrred : ¬SupIrred a ↔ IsMin a ∨ ∃ b c, b ⊔ c = a ∧ b < a ∧ c < a"
+#print "\n\n[egg] Proving 'not_supIrred : ¬SupIrred a ↔ IsMin a ∨ ∃ b c, b ⊔ c = a ∧ b < a ∧ c < a'\n\n"
 set_option egg.timeLimit 1000000000000000000 in
 theorem not_supIrred : ¬SupIrred a ↔ IsMin a ∨ ∃ b c, b ⊔ c = a ∧ b < a ∧ c < a := by
   have h x y : x ⊔ y = a ∧ ¬x = a ∧ ¬y = a ↔ x ⊔ y = a ∧ x < a ∧ y < a := by
