@@ -83,48 +83,58 @@ if [ -z "$1" ] || [ "$1" -le "4" ]; then
 fi
 
 if [ -z "$1" ] || [ "$1" -le "5" ]; then
-    echo "(5) Checking for Same Outcome and Gathering Success Stats"
-    echo -n "" > "$log_dir/step-5.txt"
+    echo "(5) Gathering Statistics"
+    echo -n "" > "$log_dir/step-5-egg.txt"
+    echo -n "" > "$log_dir/step-5-slotted.txt"
     while true; do
         IFS= read -r line_1 || break
         IFS= read -r line_2 || line_2=""
     
+
         line_1_outcome="$(echo "$line_1" | grep -E -o 'egg (succeeded|failed)')"
         line_2_outcome="$(echo "$line_2" | grep -E -o 'egg (succeeded|failed)')"
 
-        if [ "$line_1_outcome" != "$line_2_outcome" ]; then
-            echo "ERROR: different outcomes"
-            echo "$line_1"
-            echo "$line_2"
-            # exit 1
-        fi
+        # if [ "$line_1_outcome" != "$line_2_outcome" ]; then
+        #     echo "Different Outcomes!"
+        #     echo "$line_1"
+        #     echo "$line_2"
+        # fi
 
         if [ "$line_1_outcome" = "egg succeeded" ]; then
-            echo "$(echo "$line_1" | cut -d',' -f8) $(echo "$line_1" | cut -d',' -f7) $(echo "$line_2" | cut -d',' -f7)" >> "$log_dir/step-5.txt"
+            echo "$(echo "$line_1" | cut -d',' -f8) $(echo "$line_1" | cut -d',' -f7)" >> "$log_dir/step-5-egg.txt"
         else
-            echo "failed" >> "$log_dir/step-5.txt"
+            echo "failed" >> "$log_dir/step-5-egg.txt"
+        fi
+
+        if [ "$line_2_outcome" = "egg succeeded" ]; then
+            echo "$(echo "$line_2" | cut -d',' -f8) $(echo "$line_2" | cut -d',' -f7)" >> "$log_dir/step-5-slotted.txt"
+        else
+            echo "failed" >> "$log_dir/step-5-slotted.txt"
         fi
     done < "$log_dir/step-4.txt"
 fi
 
 echo -e "(6) Computing Final Results\n"
-num_test_cases="$(cat "$log_dir/step-5.txt" | wc -l | awk '{$1=$1; print}')"
-num_successes="$(cat "$log_dir/step-5.txt" | grep -E '(true|false)' | wc -l | awk '{$1=$1; print}')"
+num_test_cases="$(cat "$log_dir/step-5-egg.txt" | wc -l | awk '{$1=$1; print}')"
+egg_num_successes="$(cat "$log_dir/step-5-egg.txt" | grep -E '(true|false)' | wc -l | awk '{$1=$1; print}')"
+slotted_num_successes="$(cat "$log_dir/step-5-slotted.txt" | grep -E '(true|false)' | wc -l | awk '{$1=$1; print}')"
 
-egg_expl_length_sum="$(cat "$log_dir/step-5.txt" | grep -o ' \d* ' | awk '{ sum += $1 } END { print sum }')"
-slotted_expl_length_sum="$(cat "$log_dir/step-5.txt" | grep -o '\d*$' | awk '{ sum += $1 } END { print sum }')"
-egg_expl_length_avg="$(echo "$egg_expl_length_sum / $num_successes" | bc -l | awk '{$1=$1; print}')"
-slotted_expl_length_avg="$(echo "$slotted_expl_length_sum / $num_successes" | bc -l | awk '{$1=$1; print}')"
+egg_expl_length_sum="$(cat "$log_dir/step-5-egg.txt" | grep -o '\d*' | awk '{ sum += $1 } END { print sum }')"
+slotted_expl_length_sum="$(cat "$log_dir/step-5-slotted.txt" | grep -o '\d*' | awk '{ sum += $1 } END { print sum }')"
+egg_expl_length_avg="$(echo "$egg_expl_length_sum / $egg_num_successes" | bc -l | awk '{$1=$1; print}')"
+slotted_expl_length_avg="$(echo "$slotted_expl_length_sum / $slotted_num_successes" | bc -l | awk '{$1=$1; print}')"
 
-with_binders_successes="$(cat "$log_dir/step-5.txt" | grep 'true')"
-with_binders_num_successes="$(echo "$with_binders_successes" | wc -l | awk '{$1=$1; print}')"
-with_binders_egg_expl_length_sum="$(echo "$with_binders_successes" | grep -o ' \d* ' | awk '{ sum += $1 } END { print sum }')"
-with_binders_slotted_expl_length_sum="$(echo "$with_binders_successes" | grep -o '\d*$' | awk '{ sum += $1 } END { print sum }')"
-with_binders_egg_expl_length_avg="$(echo "$with_binders_egg_expl_length_sum / $with_binders_num_successes" | bc -l | awk '{$1=$1; print}')"
-with_binders_slotted_expl_length_avg="$(echo "$with_binders_slotted_expl_length_sum / $with_binders_num_successes" | bc -l | awk '{$1=$1; print}')"
+egg_with_binders_successes="$(cat "$log_dir/step-5-egg.txt" | grep 'true')"
+slotted_with_binders_successes="$(cat "$log_dir/step-5-slotted.txt" | grep 'true')"
+egg_with_binders_num_successes="$(echo "$egg_with_binders_successes" | wc -l | awk '{$1=$1; print}')"
+slotted_with_binders_num_successes="$(echo "$slotted_with_binders_successes" | wc -l | awk '{$1=$1; print}')"
+with_binders_egg_expl_length_sum="$(echo "$egg_with_binders_successes" | grep -o '\d*' | awk '{ sum += $1 } END { print sum }')"
+with_binders_slotted_expl_length_sum="$(echo "$slotted_with_binders_successes" | grep -o '\d*' | awk '{ sum += $1 } END { print sum }')"
+with_binders_egg_expl_length_avg="$(echo "$with_binders_egg_expl_length_sum / $egg_with_binders_num_successes" | bc -l | awk '{$1=$1; print}')"
+with_binders_slotted_expl_length_avg="$(echo "$with_binders_slotted_expl_length_sum / $slotted_with_binders_num_successes" | bc -l | awk '{$1=$1; print}')"
 
 echo -e "Total Number of Test Cases: $num_test_cases\n"
 echo "Backend | Successful Proven Theorems | Average Explanation Length | ...With Binders"
 echo "-----------------------------------------------------------------------------------"
-echo "slotted | $num_successes                        | ${slotted_expl_length_avg:0:4}                       | ${with_binders_slotted_expl_length_avg:0:4}"
-echo "egg     | $num_successes                        | ${egg_expl_length_avg:0:4}                       | ${with_binders_egg_expl_length_avg:0:4}"
+echo "slotted | $slotted_num_successes                        | ${slotted_expl_length_avg:0:4}                       | ${with_binders_slotted_expl_length_avg:0:4}"
+echo "egg     | $egg_num_successes                        | ${egg_expl_length_avg:0:4}                       | ${with_binders_egg_expl_length_avg:0:4}"

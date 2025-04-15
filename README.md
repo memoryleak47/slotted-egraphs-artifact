@@ -73,22 +73,23 @@ This is a fairer comparison, as eggs `total_size` also counts e-nodes that could
 To reproduce Table 4, run the script `lean-egg/mathlib.sh`.
 This script builds mathlib4 with calls to `simp` replaced by `egg` as described in Section 4.3.
 The build step can take on the order of 30 minutes.
-Results of the build pertaining to the `egg` tactic are logged in the `mathlib-logs` directory (which is created by the script).
-For transparency, we also log the intermediate states of subsequent processing steps in this directory, though they are not too useful themselves.
-Finally, the aggregated results are printed and should look roughly as follows:
+During the build we log statistics on `egg` tactic invocations in the `mathlib-logs` directory (which is created by the script).
+For transparency, we also log intermediate states of subsequent processing steps in this directory, though they are not too useful themselves.
+From the logged information, we compute and print the results of Table 4 which should look as follows:
 
 ```text
 Total Number of Test Cases: 442
 
 Backend | Successful Proven Theorems | Average Explanation Length | ...With Binders
 -----------------------------------------------------------------------------------
-slotted | 296                        | 6.07                       | 6.70
+slotted | 296                        | 6.07                       | 7.76
 egg     | 296                        | 5.35                       | 12.7
 ```
 
-We note that the results obtained in this artifact differ slightly from those in Table 4.
-Namely, TODO.
-This does not, however, affect the overall outcome.
+We note that the results obtained in this artifact differ slightly, and positively, from those in Table 4.
+First, we cover 15 additional test cases of which 6 are successful.
+More notably, we discover one test case (`not_bounded_iff` in `Order/RelClasses.lean`) on which the *slotted* backend succeeds while the *egg* backend does not.
+Why this did not show up during the writing of the paper is unclear to us, as this gives us another example in favor of *slotted*.
 
 ### Binder Explosion
 
@@ -108,9 +109,6 @@ The most important items are:
 * `expl steps`: The number of steps in the explanation produced by the respective equality saturation backend. If the explanation length exceeds the limit set by the `egg` tactic (1000 steps), then this value will only appear in an associated error message.
 
 The high-level results obtained from these logs are that both theorems are quickly proven by the slotted backend with few explanation steps, while the egg backend either produces too many explanation steps for the `egg` tactic to handle, or does not even return before running out of memory.
-
-To properly inspect the statements, proofs, and metrics of the theorems shown in Section 4.3, we require a setup which allows interaction with the `lean-egg` project contained in this artifact.
-To reproduce the results of the paper, it suffices to run the non-interactive CLI version as follows. If you want to explore further, we recommend the Interactive version below.
 
 #### Further Inspection
 
@@ -134,6 +132,6 @@ The proofs in the `Egg` namespace fail for two reasons:
 * `not_supPrime`: This call to `egg` produces an explanation with over 4000 steps, which exceeds the explanation length limit. The `egg` tactic employs an "explanation length limit", to abort invocations which produce explanations which are too long to process in a reasonable amount of time. To (try to) process such explanations anyway, increase the explanation length limit with `set_option egg.explLengthLimit <num>`. Note that this may cause the tactic to take multiple minutes to complete.
 * `not_supIrred`: This call to `egg` highlights e-graph explosion, which means that this invocation always times out. In this test case, we set the timout to `1000000000000000000` to show that equality saturation does not complete in any sensible amount of time. Running this tactic invocation for several hours leads to memory overflow. In comparison, this same theorem is proven with the *slotted* backend in less than 1 second. To inspect intermediate results, reduce the time limit to a value like 10 (seconds) by adjusting the value passed to the `egg.timeLimit` option. Note how quickly the number of e-nodes and -classes grows (by hovering over the tactic call and inspecting the info message).
 
-To view the explanations/proofs discovered by a given tactic invocation, start by enabling the `egg.explanation{.steps}` options on lines 38 and 39. Then, place the cursor on the line of the `egg` tactic invocation and open the *Infoview*. The "Explanation" item shows the raw explanation string as returned by the backend. The "Explanation Steps" item shows the explanation in a more readable form, as pretty-printed Lean expressions.
+To view the explanations/proofs discovered by a given tactic invocation, start by enabling the tracing options on lines 38 and 39. Then, place the cursor on the line of the `egg` tactic invocation and open the *Infoview*. The "Explanation" item shows the raw explanation string as returned by the backend. The "Explanation Steps" item shows the explanation in a more readable form, as pretty-printed Lean expressions.
 
 
