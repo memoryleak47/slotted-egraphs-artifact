@@ -34,6 +34,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     sudo \
     time \
+    bc \
     coreutils
 
 # Create a regular user
@@ -59,6 +60,7 @@ COPY --chown=user . .
 WORKDIR /home/user/lean-egg
 RUN /home/user/.elan/bin/lake update
 RUN /home/user/.elan/bin/lake build
+RUN cd /home/user/lean-egg/Lean/Egg/Tests/mathlib4/mathlib4; /home/user/.elan/bin/lake update
 
 # Download and install Python packages
 WORKDIR /home/user/
@@ -69,5 +71,6 @@ RUN cd /home/user/functional-array-language/egg-rise; cargo build --release
 RUN cd /home/user/functional-array-language/slotted-rise; cargo build --release
 RUN cd /home/user/sdql/baseline; cargo build --release
 RUN cd /home/user/sdql/slotted; cargo build --release
+
 
 CMD ["/usr/bin/bash"]
