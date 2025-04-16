@@ -106,11 +106,11 @@ The most important items are:
 * `classes`: The number of e-classes contained in the e-graph when equality saturation completed (potentially by being aborted due to exceeding resource limits.)
 * `expl steps`: The number of steps in the explanation produced by the respective equality saturation backend. If the explanation length exceeds the limit set by the `egg` tactic (1000 steps), then this value will only appear in an associated error message.
 
-The high-level results obtained from these logs are that both theorems are quickly proven by the slotted backend with few explanation steps, while the egg backend either produces too many explanation steps for the `egg` tactic to handle, or does not even return before running out of memory.
+The high-level results obtained from these logs are that both theorems are quickly proven by the *slotted* backend with few explanation steps, while the *egg* backend either produces too many explanation steps for the `egg` tactic to handle, or does not even return before running out of memory.
 
 #### Further Inspection
 
-For the interested reader, we also outline how to inspect the Lean file in more depth.
+For the interested reader, we also outline how to inspect the `PLDI.lean` test file in more depth.
 In this case, we require the use of [VS Code](https://code.visualstudio.com) with the [Lean4](https://marketplace.visualstudio.com/items?itemName=leanprover.lean4) extension.
 
 > If you want to use VS Code within docker, you need the [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension.
