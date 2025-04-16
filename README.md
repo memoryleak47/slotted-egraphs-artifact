@@ -102,8 +102,6 @@ The most important items are:
 
 * `total time`: The total amount of time taken to complete the call to the `egg` tactic.
 * `eqsat time`: The amount of time taken to run equality saturation in the backend.
-* `proof time`: The length of the time span starting after equality saturation completed and ending with the completion of the `egg` tactic. This time span mainly represents the amount of time taken for proof reconstruction.
-* `iters`: The number of iterations run before equality saturation completed (potentially by being aborted due to exceeding resource limits.)
 * `nodes`: The number of e-nodes contained in the e-graph when equality saturation completed (potentially by being aborted due to exceeding resource limits.)
 * `classes`: The number of e-classes contained in the e-graph when equality saturation completed (potentially by being aborted due to exceeding resource limits.)
 * `expl steps`: The number of steps in the explanation produced by the respective equality saturation backend. If the explanation length exceeds the limit set by the `egg` tactic (1000 steps), then this value will only appear in an associated error message.
