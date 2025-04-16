@@ -11,9 +11,9 @@ mkdir -p "$log_dir"
 if [ -z "$1" ] || [ "$1" -le "1" ]; then
     echo "(1) Building Mathlib"
     echo -n "" > "$log_dir/step-1.txt"
-    sleep 3
-    # lake clean
-    lake build | tee "$log_dir/step-1.txt" | grep '✔'
+    sleep 2
+    lake clean
+    lake build 2>/dev/null | tee "$log_dir/step-1.txt" | grep '✔'
 fi
 
 if [ -z "$1" ] || [ "$1" -le "2" ]; then
@@ -23,7 +23,7 @@ if [ -z "$1" ] || [ "$1" -le "2" ]; then
 fi
 
 if [ -z "$1" ] || [ "$1" -le "3" ]; then
-    echo "(3) Matching Slotted and Egg Results"
+    echo "(3) Validating Pairing of Slotted and Egg Results"
     echo -n "" > "$log_dir/step-3.txt"
     while true; do
         IFS= read -r line_1 || break
@@ -51,7 +51,7 @@ if [ -z "$1" ] || [ "$1" -le "3" ]; then
 fi
 
 if [ -z "$1" ] || [ "$1" -le "4" ]; then
-    echo "(4) Pruning Non-Applicable Calls"
+    echo "(4) Pruning Non-Applicable Invocations"
     echo -n "" > "$log_dir/step-4.txt"
     while true; do
         IFS= read -r line_1 || break
@@ -90,7 +90,6 @@ if [ -z "$1" ] || [ "$1" -le "5" ]; then
         IFS= read -r line_1 || break
         IFS= read -r line_2 || line_2=""
     
-
         line_1_outcome="$(echo "$line_1" | grep -E -o 'egg (succeeded|failed)')"
         line_2_outcome="$(echo "$line_2" | grep -E -o 'egg (succeeded|failed)')"
 
@@ -100,14 +99,22 @@ if [ -z "$1" ] || [ "$1" -le "5" ]; then
         #     echo "$line_2"
         # fi
 
+        line_1_binders="$(echo "$line_1" | cut -d',' -f8)"
+        line_2_binders="$(echo "$line_2" | cut -d',' -f8)"
+        
+        any_binders="false"
+        if [ "$line_1_binders" = "true" ] || [ "$line_2_binders" = "true" ]; then
+            any_binders="true"
+        fi
+
         if [ "$line_1_outcome" = "egg succeeded" ]; then
-            echo "$(echo "$line_1" | cut -d',' -f8) $(echo "$line_1" | cut -d',' -f7)" >> "$log_dir/step-5-egg.txt"
+            echo "$any_binders $(echo "$line_1" | cut -d',' -f7)" >> "$log_dir/step-5-egg.txt"
         else
             echo "failed" >> "$log_dir/step-5-egg.txt"
         fi
 
         if [ "$line_2_outcome" = "egg succeeded" ]; then
-            echo "$(echo "$line_2" | cut -d',' -f8) $(echo "$line_2" | cut -d',' -f7)" >> "$log_dir/step-5-slotted.txt"
+            echo "$any_binders $(echo "$line_2" | cut -d',' -f7)" >> "$log_dir/step-5-slotted.txt"
         else
             echo "failed" >> "$log_dir/step-5-slotted.txt"
         fi

@@ -72,22 +72,22 @@ This is a fairer comparison, as eggs `total_size` also counts e-nodes that could
 
 To reproduce Table 4, run the script `lean-egg/mathlib.sh`.
 This script builds mathlib4 with calls to `simp` replaced by `egg` as described in Section 4.3.
-The build step can take on the order of 30 minutes.
+The build step can take about 20 minutes.
 During the build we log statistics on `egg` tactic invocations in the `mathlib-logs` directory (which is created by the script).
 For transparency, we also log intermediate states of subsequent processing steps in this directory, though they are not too useful themselves.
 From the logged information, we compute and print the results of Table 4 which should look as follows:
 
 ```text
-Total Number of Test Cases: 442
+Total Number of Test Cases: 443
 
 Backend | Successful Proven Theorems | Average Explanation Length | ...With Binders
 -----------------------------------------------------------------------------------
-slotted | 296                        | 6.07                       | 7.76
+slotted | 297                        | 6.08                       | 6.77
 egg     | 296                        | 5.35                       | 12.7
 ```
 
 We note that the results obtained in this artifact differ slightly, and positively, from those in Table 4.
-First, we cover 15 additional test cases of which 6 are successful.
+First, we cover 16 additional test cases of which 6 are successful.
 More notably, we discover one test case (`not_bounded_iff` in `Order/RelClasses.lean`) on which the *slotted* backend succeeds while the *egg* backend does not.
 Why this did not show up during the writing of the paper is unclear to us, as this gives us another example in favor of *slotted*.
 
